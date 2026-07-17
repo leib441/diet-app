@@ -36,8 +36,7 @@ app.post('/send', async (req, res) => {
         const allRows = await database('diet_table').select('*').orderBy('date', 'asc');
         res.json({success: true, data: allRows })
     } catch (error) {
-        const allRows = await database('diet_table').select('*').orderBy('date', 'asc');
-        res.json({ success: false})
+       res.json({success: false});
     }
 })
 
@@ -59,5 +58,5 @@ res.json({success: true, data:allRows})
           res.json({ success: false}); 
     }
 });
-const port = 4000
+const port = process.env.PORT
 app.listen(port);
