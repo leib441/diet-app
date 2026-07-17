@@ -58,5 +58,5 @@ res.json({success: true, data:allRows})
           res.json({ success: false}); 
     }
 });
-const port = process.env.PORT
+const port = 4000;
 app.listen(port);
