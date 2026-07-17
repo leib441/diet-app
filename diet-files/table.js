@@ -195,7 +195,6 @@ async function searchByDate() {
         const searchInput = document.querySelector('#search').value;
         const table = document.querySelector('#assignment-list');
         table.innerHTML = '';
-
         for (let row of result.data) {
             if (new Date(row.date).toISOString().split('T')[0] === searchInput) {
                 const newRow = document.createElement('tr');

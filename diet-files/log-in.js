@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 })
 async function logIn(){
+    
     const userEntered = document.querySelector('#inputPass').value;
     const request = await fetch('/log-in', {
         method: 'POST',
