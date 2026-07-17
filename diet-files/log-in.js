@@ -20,16 +20,3 @@ async function logIn(){
         document.querySelector('#inputPass').value = '';
     }
 }
-
-
- function tripLogIn(){
-    const userEntered = document.querySelector('#tripInputPass').value;
-    
-    if (userEntered === '123') {
-        console.log('good pass');
-        window.open('trip.html', '_self');
-    } else {
-        alert('Wrong password, try again!');
-        document.querySelector('#tripInputPass').value = '';
-    }
-}
