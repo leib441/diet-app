@@ -52,8 +52,7 @@ app.get('/get', async (req, res) => {
 app.delete('/delete', async (req, res) => { 
     try{
 await database('diet_table').where('id' , req.body.id).delete();
-const allRows = await database('diet_table').select('*').orderBy('date', 'asc');
-res.json({success: true, data:allRows})
+res.json({success: true})
     }catch{
           res.json({ success: false}); 
     }

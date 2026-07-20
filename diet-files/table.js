@@ -1,5 +1,7 @@
-document.addEventListener('DOMContentLoaded', async function () {
+let table;
 
+document.addEventListener('DOMContentLoaded', async function () {
+    table = document.querySelector('#assignment-list');
     await getTable();
     deleteData();
     showBtnClicked();
@@ -16,11 +18,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         event.preventDefault();
         const date = document.querySelector('#date').value;
         const weight = document.querySelector('#weight').value;
-        if (date && weight) {
-            await sendData();
-        } else {
-            alert('Please Fill Out All Fields!');
-        }
+        if (!date || !weight) return alert('Please Fill Out All Fields!');
+        await sendData();
     });
 
     document.querySelectorAll('#search-btn, #search-weight-btn').forEach(btn => {
@@ -29,10 +28,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (btn.id === 'search-btn') {
                 const searchDate = document.querySelector('#search').value;
-                searchDate ? await searchByDate() : console.log('no search entry!');
+                if (!searchDate) return alert('no search entry!');
+                await searchByDate();
             } else {
                 const searchWeight = document.querySelector('#search-weight').value;
-                searchWeight ? await searchByWeight() : console.log('no search entry!');
+                if (!searchWeight) return alert('no search entry!');
+                await searchByWeight();
             }
         });
     });
@@ -49,29 +50,12 @@ function showCommentInput() {
 async function getTable() {
     const request = await fetch('/get', { method: 'get' });
     const result = await request.json();
-
-    if (result.success) {
-        const table = document.querySelector('#assignment-list');
-        table.innerHTML = '';
-
-        result.data.forEach(row => {
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
-                <td>${row.weight}</td>
-                <td></td>
-                <td></td>
-                <td>${row.comment}</td>
-                <td><button id="${row.id}" class="deleteBtn">Delete</button></td>
-            `;
-            table.appendChild(newRow);
-        });
-
-        calculations();
-
-    } else {
-        console.error('Failed to fetch data:', result.error);
-    }
+    if (!result.success) return console.error('Failed to fetch data:', result.error);
+    table.innerHTML = '';
+    result.data.forEach(row => {
+        trToTable(row, table);
+    });
+    calculations();
 }
 
 async function sendData() {
@@ -86,61 +70,40 @@ async function sendData() {
         previousWeight = Number(existingRows[existingRows.length - 1].cells[1].textContent.trim());
     }
 
-    if (date && weight) {
-        const request = await fetch('/send', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ date, weight, comment })
-        });
+    const request = await fetch('/send', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date, weight, comment })
+    });
 
-        const result = await request.json();
+    const result = await request.json();
+    if (!result.success) return console.error('Failed to fetch data:', result.error);
+    table.innerHTML = '';
+    result.data.forEach(row => {
+        trToTable(row, table);
+    });
 
-        if (result.success) {
-            const table = document.querySelector('#assignment-list');
-            table.innerHTML = '';
+    calculations();
+    const myContainer = document.querySelector('.table-container');
+    myContainer.style.display = 'block';
+    myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            result.data.forEach(row => {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
-                    <td>${row.weight}</td>
-                    <td></td>
-                    <td></td>
-                    <td>${row.comment}</td>
-                    <td><button id="${row.id}" class="deleteBtn">Delete</button></td>
-                `;
-                table.appendChild(newRow);
-            });
-
-            calculations();
-            showTable();
-
-            const newWeight = Number(weight);
-            if (previousWeight !== null && newWeight < previousWeight) {
-                const lost = previousWeight - newWeight;
-                showCelebration(lost);
-            }
-
-        } else {
-            console.error('Failed to fetch data:', result.error);
-        }
-
-        document.querySelector('#weight').value = '';
-        document.querySelector('#date').value = '';
-        document.querySelector('#comment').value = '';
-        document.querySelector('#comment-input').style.display = 'none';
+    //celebration
+    const newWeight = Number(weight);
+    if (previousWeight !== null && newWeight < previousWeight){
+    const lost = previousWeight - newWeight;
+    showCelebration(lost);
     }
+
+    document.querySelector('#weight').value = '';
+    document.querySelector('#date').value = '';
+    document.querySelector('#comment').value = '';
+    document.querySelector('#comment-input').style.display = 'none';
 }
 
 function changeStyle() {
     const link = document.querySelector('#main-style');
     link.href = link.href.includes('ai-style.css') ? 'style.css' : 'ai-style.css';
-}
-
-function showTable() {
-    const myContainer = document.querySelector('.table-container');
-    myContainer.style.display = 'block';
-    myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function showBtnClicked() {
@@ -182,61 +145,34 @@ async function searchByDate() {
     const request = await fetch('/get', { method: 'get' });
     const result = await request.json();
 
-    if (result.success) {
-        const searchInput = document.querySelector('#search').value;
-        const table = document.querySelector('#assignment-list');
-        table.innerHTML = '';
-        for (let row of result.data) {
-            if (new Date(row.date).toISOString().split('T')[0] === searchInput) {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
-                    <td>${row.weight}</td>
-                    <td></td>
-                    <td></td>
-                    <td>${row.comment}</td>
-                    <td><button id="${row.id}" class="deleteBtn">Delete</button></td>
-                `;
-                table.appendChild(newRow);
-            }
+    if (!result.success) return console.error('failed to fetch data');
+    const searchInput = document.querySelector('#search').value;
+    table.innerHTML = '';
+    for (let row of result.data) {
+        if (new Date(row.date).toISOString().split('T')[0] === searchInput) {
+            trToTable(row, table);
         }
-        document.querySelector('#search').value = '';
-    } else {
-        console.error('failed to fetch data');
     }
+    document.querySelector('#search').value = '';
 }
 
 async function searchByWeight() {
     const request = await fetch('/get', { method: 'get' });
     const result = await request.json();
 
-    if (result.success) {
-        const searchInput = document.querySelector('#search-weight').value;
-        const table = document.querySelector('#assignment-list');
-        table.innerHTML = '';
+    if (!result.success) return console.error('failed to fetch data');
+    const searchInput = document.querySelector('#search-weight').value;
+    table.innerHTML = '';
 
-        for (let row of result.data) {
-            if (Number(row.weight) === Number(searchInput)) {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
-                    <td>${row.weight}</td>
-                    <td></td>
-                    <td></td>
-                    <td>${row.comment}</td>
-                    <td><button id="${row.id}" class="deleteBtn">Delete</button></td>
-                `;
-                table.appendChild(newRow);
-            }
+    for (let row of result.data) {
+        if (Number(row.weight) === Number(searchInput)) {
+            trToTable(row, table);
         }
-        document.querySelector('#search-weight').value = '';
-    } else {
-        console.error('failed to fetch data');
     }
+    document.querySelector('#search-weight').value = '';
 }
 
 function deleteData() {
-    const table = document.querySelector('#assignment-list');
     table.addEventListener('click', async function (event) {
         if (!event.target.classList.contains('deleteBtn')) return;
         event.preventDefault();
@@ -263,9 +199,9 @@ function calculations() {
     calculateTotalWeightLost();
 }
 
-// ===================================================
-// ✅ CELEBRATION / FIREWORKS FUNCTIONS
-// ===================================================
+
+// CELEBRATION / FIREWORKS FUNCTIONS (created with AI);
+
 let _fwInterval = null;
 let _fwFrame = null;
 const _fwParticles = [];
@@ -281,8 +217,7 @@ function showCelebration(lostAmount) {
     canvas.height = window.innerHeight;
     _launchFireworks(canvas);
 
-    // Auto-close after 9 seconds
-    setTimeout(closeCelebration, 15000);
+    setTimeout(closeCelebration, 10000);
 }
 
 function closeCelebration() {
@@ -359,3 +294,15 @@ function _stopFireworks() {
     if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function trToTable(row, table) {
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+                    <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
+                    <td>${row.weight}</td>
+                    <td></td>
+                    <td></td>
+                    <td>${row.comment}</td>
+                    <td><button id="${row.id}" class="deleteBtn">Delete</button></td>
+                `;
+    table.appendChild(newRow);
+}
