@@ -3,7 +3,7 @@ import knex from 'knex';
 import 'dotenv/config';
 const app = express();
 
-app.use(express.static('diet-files'));
+app.use(express.static('project-files'));
 app.use(express.json())
 
 const database = knex({

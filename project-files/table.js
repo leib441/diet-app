@@ -1,19 +1,47 @@
 let table;
+let myContainer;
+let btn;
 
 document.addEventListener('DOMContentLoaded', async function () {
     table = document.querySelector('#assignment-list');
+    myContainer = document.querySelector('.table-container');
+    btn = document.querySelector('#show-btn');
+
     await getTable();
     deleteData();
-    showBtnClicked();
-    showCommentInput();
-
-    document.querySelector('.style-btn').addEventListener('click', async function (event) {
+    document.querySelector('.style-btn').addEventListener('click', function (event) {
         event.preventDefault();
         const btn = document.querySelector('.style-btn');
         btn.innerHTML = btn.innerHTML === 'previous style' ? 'change style' : 'previous style';
         changeStyle();
     });
-
+    document.querySelector('.scroll-table-btn').addEventListener('click', function (event) {
+        event.preventDefault();
+        const btn = document.querySelector('.scroll-table-btn')
+        if (btn.innerHTML === 'Scroll To Table') {
+            scrollToTable(myContainer, btn);
+        } else {
+            const form = document.querySelector('.container')
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        btn.innerHTML = btn.innerHTML === 'Scroll To Top' ? 'Scroll To Table' : 'Scroll To Top';
+    });
+    document.querySelector('.more-detailes').addEventListener('click', function (event) {
+        event.preventDefault();
+        scrollToTable()
+        const table = document.querySelector('.fact-area');
+        table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })
+    document.querySelector('.scroll-search').addEventListener('click', function (event) {
+        event.preventDefault();
+        myContainer.style.display = 'block';
+        const searchArea = document.querySelector('.show');
+        searchArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })
+    btn.addEventListener('click', function (event) {
+        event.preventDefault();
+        showBtnClicked(myContainer, btn);
+    })
     document.querySelector('#submit').addEventListener('click', async function (event) {
         event.preventDefault();
         const date = document.querySelector('#date').value;
@@ -21,7 +49,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (!date || !weight) return alert('Please Fill Out All Fields!');
         await sendData();
     });
-
     document.querySelectorAll('#search-btn, #search-weight-btn').forEach(btn => {
         btn.addEventListener('click', async function (event) {
             event.preventDefault();
@@ -38,14 +65,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     });
 });
-
-function showCommentInput() {
-    document.querySelector('.commentBtn').addEventListener('click', function (event) {
-        event.preventDefault();
-        const commentInput = document.querySelector('#comment-input');
-        commentInput.style.display = commentInput.style.display === 'block' ? 'none' : 'block';
-    });
-}
 
 async function getTable() {
     const request = await fetch('/get', { method: 'get' });
@@ -84,15 +103,13 @@ async function sendData() {
     });
 
     calculations();
-    const myContainer = document.querySelector('.table-container');
-    myContainer.style.display = 'block';
-    myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToTable(myContainer, btn);
 
     //celebration
     const newWeight = Number(weight);
-    if (previousWeight !== null && newWeight < previousWeight){
-    const lost = previousWeight - newWeight;
-    showCelebration(lost);
+    if (previousWeight !== null && newWeight < previousWeight) {
+        const lost = previousWeight - newWeight;
+        showCelebration(lost);
     }
 
     document.querySelector('#weight').value = '';
@@ -103,16 +120,22 @@ async function sendData() {
 
 function changeStyle() {
     const link = document.querySelector('#main-style');
-    link.href = link.href.includes('ai-style.css') ? 'style.css' : 'ai-style.css';
+    link.href = link.href.includes('my-style.css') ? 'style.css' : 'my-style.css';
 }
 
 function showBtnClicked() {
-    document.querySelector('#show-btn').addEventListener('click', function (event) {
-        event.preventDefault();
-        const myContainer = document.querySelector('.table-container');
-        myContainer.style.display = myContainer.style.display === 'block' ? 'none' : 'block';
-        myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+    if (btn.innerHTML === 'Show Table') {
+        scrollToTable(myContainer, btn);
+    } else {
+        btn.innerHTML = 'Show Table';
+        myContainer.style.display = 'none';
+    }
+}
+
+function scrollToTable() {
+    btn.innerHTML = 'Hide Table';
+    myContainer.style.display = 'block'
+    myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function calculateTotalWeightLost() {
@@ -194,14 +217,13 @@ function deleteData() {
     });
 }
 
-function calculations() {
-    calculateSinceLastWeight();
-    calculateTotalWeightLost();
+function weeks() {
+    const allRows = document.querySelectorAll('#assignment-list tr');
+    const rowCount = allRows.length;
+    trToFacts(rowCount);
 }
 
-
 // CELEBRATION / FIREWORKS FUNCTIONS (created with AI);
-
 let _fwInterval = null;
 let _fwFrame = null;
 const _fwParticles = [];
@@ -209,14 +231,12 @@ const _fwParticles = [];
 function showCelebration(lostAmount) {
     const overlay = document.getElementById('celebration-overlay');
     const text = document.getElementById('celebration-text');
-
     text.innerHTML = `You lost <strong style="color:#FFD700; font-size:1.8rem;">${lostAmount.toFixed(1)} lbs</strong> since last week!<br>Amazing work! 🔥`;
     overlay.classList.add('active');
     const canvas = document.getElementById('fireworks-canvas');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     _launchFireworks(canvas);
-
     setTimeout(closeCelebration, 10000);
 }
 
@@ -243,9 +263,7 @@ function _launchFireworks(canvas) {
             p.vx *= 0.99;
             p.life -= 0.016;
             p.radius *= 0.97;
-
             if (p.life <= 0) { _fwParticles.splice(i, 1); continue; }
-
             ctx.save();
             ctx.globalAlpha = Math.max(0, p.life);
             ctx.fillStyle = p.color;
@@ -256,7 +274,6 @@ function _launchFireworks(canvas) {
             ctx.fill();
             ctx.restore();
         }
-
         _fwFrame = requestAnimationFrame(animate);
     })();
 }
@@ -305,4 +322,20 @@ function trToTable(row, table) {
                     <td><button id="${row.id}" class="deleteBtn">Delete</button></td>
                 `;
     table.appendChild(newRow);
+}
+function trToFacts(rowCount) {
+    const tbody = document.querySelector('#facts-list')
+    tbody.innerHTML = '';
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+    <td>${rowCount}</td>
+    <td>N/A</td>
+    <td>N/A</td>
+    `;
+    tbody.appendChild(newRow);
+}
+function calculations() {
+    calculateSinceLastWeight();
+    calculateTotalWeightLost();
+    weeks();
 }
