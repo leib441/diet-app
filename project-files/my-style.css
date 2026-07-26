@@ -60,14 +60,6 @@ body {
   transition: transform 0.8s ease-in-out;
 }
 
-.show {
-  margin: 20px;
-}
-
-.table-container {
-  display: none;
-}
-
 .form-area {
   width: 100%;
   border-collapse: collapse;
@@ -102,15 +94,6 @@ body {
   background-color: rgb(162, 162, 80);
 }
 
-.show {
-  background-color: blueviolet;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  height: 40px;
-}
-.show:hover {
-  background-color: rgb(162, 162, 80);
-}
 
 table {
   width: 100%;
