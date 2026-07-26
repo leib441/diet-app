@@ -1,11 +1,7 @@
 let table;
-let myContainer;
-let btn;
 
 document.addEventListener('DOMContentLoaded', async function () {
     table = document.querySelector('#assignment-list');
-    myContainer = document.querySelector('.table-container');
-    btn = document.querySelector('#show-btn');
 
     await getTable();
     deleteData();
@@ -17,31 +13,27 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
     document.querySelector('.scroll-table-btn').addEventListener('click', function (event) {
         event.preventDefault();
-        const btn = document.querySelector('.scroll-table-btn')
-        if (btn.innerHTML === 'Scroll To Table') {
-            scrollToTable(myContainer, btn);
+        const scrollBtn = document.querySelector('.scroll-table-btn')
+        if (scrollBtn.innerHTML === 'Scroll To Table') {
+            const myContainer = document.querySelector('.table-container');
+            myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-            const form = document.querySelector('.container')
+            const form = document.querySelector('.allPage')
             form.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        btn.innerHTML = btn.innerHTML === 'Scroll To Top' ? 'Scroll To Table' : 'Scroll To Top';
+        scrollBtn.innerHTML = scrollBtn.innerHTML === 'Scroll To Top' ? 'Scroll To Table' : 'Scroll To Top';
     });
     document.querySelector('.more-detailes').addEventListener('click', function (event) {
         event.preventDefault();
-        scrollToTable()
         const table = document.querySelector('.fact-area');
         table.scrollIntoView({ behavior: 'smooth', block: 'start' });
     })
     document.querySelector('.scroll-search').addEventListener('click', function (event) {
         event.preventDefault();
-        myContainer.style.display = 'block';
-        const searchArea = document.querySelector('.show');
+        const searchArea = document.querySelector('#submit');
         searchArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
     })
-    btn.addEventListener('click', function (event) {
-        event.preventDefault();
-        showBtnClicked(myContainer, btn);
-    })
+
     document.querySelector('#submit').addEventListener('click', async function (event) {
         event.preventDefault();
         const date = document.querySelector('#date').value;
@@ -103,8 +95,7 @@ async function sendData() {
     });
 
     calculations();
-    scrollToTable(myContainer, btn);
-
+    table.scrollIntoView({ behavior: 'smooth', block: 'start' });
     //celebration
     const newWeight = Number(weight);
     if (previousWeight !== null && newWeight < previousWeight) {
@@ -115,7 +106,7 @@ async function sendData() {
     document.querySelector('#weight').value = '';
     document.querySelector('#date').value = '';
     document.querySelector('#comment').value = '';
-    document.querySelector('#comment-input').style.display = 'none';
+
 }
 
 function changeStyle() {
@@ -123,35 +114,7 @@ function changeStyle() {
     link.href = link.href.includes('my-style.css') ? 'style.css' : 'my-style.css';
 }
 
-function showBtnClicked() {
-    if (btn.innerHTML === 'Show Table') {
-        scrollToTable(myContainer, btn);
-    } else {
-        btn.innerHTML = 'Show Table';
-        myContainer.style.display = 'none';
-    }
-}
-
-function scrollToTable() {
-    btn.innerHTML = 'Hide Table';
-    myContainer.style.display = 'block'
-    myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function calculateTotalWeightLost() {
-    const allRows = document.querySelectorAll('#assignment-list tr');
-    if (allRows.length === 0) return;
-    const startingWeight = Number(allRows[0].cells[1].textContent);
-
-    allRows.forEach((row) => {
-        const currentWeight = Number(row.cells[1].textContent);
-        const weightLost = startingWeight - currentWeight;
-        row.cells[3].textContent = `${weightLost.toFixed(1)}`;
-    });
-}
-
-function calculateSinceLastWeight() {
-    const allRows = document.querySelectorAll('#assignment-list tr');
+function calculateSinceLastWeight(allRows) {
     if (allRows.length === 0) return;
     for (let i = 0; i < allRows.length; i++) {
         if (i === 0) {
@@ -217,17 +180,60 @@ function deleteData() {
     });
 }
 
-function weeks() {
-    const allRows = document.querySelectorAll('#assignment-list tr');
+function weeks(allRows) {
     const rowCount = allRows.length;
-    trToFacts(rowCount);
+    if (allRows.length === 0) return '-';
+    return (rowCount);
+}
+
+function avrageLost(allRows) {
+    if (allRows.length < 2) return '-';
+
+    let allWeights = 0;
+    allRows.forEach(row => {
+        allWeights += Number(row.cells[2].textContent);
+    })
+    const avrage = (allWeights / (allRows.length - 1)).toFixed(1);
+    return (avrage);
+}
+
+function calculateTotalWeightLost(allRows) {
+    if (allRows.length === 0) return '-';
+    const startingWeight = Number(allRows[0].cells[1].textContent);
+    const lastWeight = Number(allRows[allRows.length - 1].cells[1].textContent);
+    const totalWeightLost = startingWeight - lastWeight;
+    if (totalWeightLost < 0.1) return '-';
+    return (totalWeightLost.toFixed(1))
+}
+
+function needToLoss(allRows) {
+    if (allRows.length === 0) return '-';
+    const lastRow = allRows[allRows.length - 1];
+    const lastWeight = Number(lastRow.cells[1].textContent);
+    const goal = 114;
+    const lastVsGoal = lastWeight - goal;
+    const howmanyToGo = lastVsGoal.toFixed(1);
+    if ((lastWeight === goal) || (lastWeight < goal)) return '-';
+    return (howmanyToGo)
+}
+
+function goalPercent(allRows) {
+    if (allRows.length === 0) return 0;
+
+    const startWeight = Number(allRows[0].cells[1].textContent);
+    const currentWeight = Number(allRows[allRows.length - 1].cells[1].textContent);
+    const goal = 114;
+    const totalToLose = startWeight - goal;
+    const alreadyLost = startWeight - currentWeight;
+    if ((startWeight === goal) || (startWeight < goal)) return 100;
+    const percent = ((alreadyLost / totalToLose) * 100).toFixed();
+    return (percent);
 }
 
 // CELEBRATION / FIREWORKS FUNCTIONS (created with AI);
 let _fwInterval = null;
 let _fwFrame = null;
 const _fwParticles = [];
-
 function showCelebration(lostAmount) {
     const overlay = document.getElementById('celebration-overlay');
     const text = document.getElementById('celebration-text');
@@ -239,12 +245,10 @@ function showCelebration(lostAmount) {
     _launchFireworks(canvas);
     setTimeout(closeCelebration, 10000);
 }
-
 function closeCelebration() {
     document.getElementById('celebration-overlay').classList.remove('active');
     _stopFireworks();
 }
-
 function _launchFireworks(canvas) {
     const ctx = canvas.getContext('2d');
     _fwParticles.length = 0;
@@ -277,7 +281,6 @@ function _launchFireworks(canvas) {
         _fwFrame = requestAnimationFrame(animate);
     })();
 }
-
 function _createBurst(canvas) {
     const colors = [
         '#FFD700', '#FF6347', '#00CED1', '#FF69B4',
@@ -302,7 +305,6 @@ function _createBurst(canvas) {
         });
     }
 }
-
 function _stopFireworks() {
     clearInterval(_fwInterval);
     cancelAnimationFrame(_fwFrame);
@@ -317,25 +319,34 @@ function trToTable(row, table) {
                     <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
                     <td>${row.weight}</td>
                     <td></td>
-                    <td></td>
                     <td>${row.comment}</td>
                     <td><button id="${row.id}" class="deleteBtn">Delete</button></td>
                 `;
     table.appendChild(newRow);
 }
-function trToFacts(rowCount) {
+
+function trToStats(rowCount, avrage, totalWeightLost, howmanyToGo, percent) {
     const tbody = document.querySelector('#facts-list')
     tbody.innerHTML = '';
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
     <td>${rowCount}</td>
-    <td>N/A</td>
-    <td>N/A</td>
+    <td>${avrage}</td>
+    <td>${totalWeightLost}</td>
+    <td>${howmanyToGo}</td>
+    <td>${percent}%</td>
     `;
     tbody.appendChild(newRow);
 }
+
 function calculations() {
-    calculateSinceLastWeight();
-    calculateTotalWeightLost();
-    weeks();
+    const allRows = document.querySelectorAll('#assignment-list tr');
+    calculateSinceLastWeight(allRows);
+
+    const rowCount = weeks(allRows);
+    const avrage = avrageLost(allRows);
+    const howmanyToGo = needToLoss(allRows);
+    const totalWeightLost = calculateTotalWeightLost(allRows);
+    const percent = goalPercent(allRows);
+    trToStats(rowCount, avrage, totalWeightLost, howmanyToGo, percent);
 }

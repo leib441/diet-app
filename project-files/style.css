@@ -5,7 +5,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
 
 /* ===== CSS Variables ===== */
-
 :root {
   --primary: #7a72ff;
   --primary-light: #aba4fe;
@@ -49,25 +48,36 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-html {
-  scroll-behavior: smooth;
-}
-
 /* ===== Body ===== */
+
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-dark);
+  background-color: var(--bg-dark);  
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.65;
   overflow-x: hidden;
+}
 
+/* ===== Ambient Blobs — fixed layer, no repaint on scroll ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
     radial-gradient(ellipse at 15% 50%, rgba(108, 99, 255, 0.17) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 15%, rgba(253, 121, 168, 0.12) 0%, transparent 45%),
     radial-gradient(ellipse at 60% 85%, rgba(0, 206, 201, 0.10) 0%, transparent 45%);
-  background-attachment: fixed;
+  transform: translateZ(0);
+}
+.form-area,
+.table-container,
+.settings {
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 /* ============================================
    SETTINGS NAV BAR
@@ -82,9 +92,9 @@ body {
   align-items: center;
   gap: 12px;
   padding: 14px 32px;
-  background: rgba(15, 14, 23, 0.8);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(15, 14, 23, 0.99);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
@@ -178,8 +188,8 @@ h3 {
 .form-area {
   position: relative;
   background: var(--bg-glass);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 42px 44px;
@@ -258,12 +268,11 @@ h3 {
   transform: translateY(0);
 }
 
-/* ===== Show Table Button ===== */
-#show-btn,
+/* ===== Submit Button ===== */
 .submit-button {
   display: block;
   padding: 12px 38px;
-  background: /*transparent;*/black;
+  background: var(--bg-dark);
   border: 1px solid var(--border);
   border-radius: 50px;
   color: var(--text-secondary);
@@ -274,10 +283,6 @@ h3 {
   transition: var(--transition);
   letter-spacing: 0.3px;
 }
-#show-btn {
-  margin: 0 auto 40px;
-}
-#show-btn:hover,
 .submit-button:hover {
   border-color: var(--accent);
   color: var(--accent);
@@ -290,15 +295,15 @@ h3 {
    TABLE CONTAINER CARD
    ============================================ */
 .table-container {
-  display: none;
   background: var(--bg-glass);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 36px;
   box-shadow: var(--shadow-md);
   overflow: hidden;
+  text-align: center;
 }
 
 /* ===== Search ===== */
@@ -404,7 +409,7 @@ section::-webkit-scrollbar-thumb {
 }
 #assignment-table th {
   padding: 16px 20px;
-  text-align: left;
+  text-align:center;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 1.3px;
@@ -428,28 +433,24 @@ section::-webkit-scrollbar-thumb {
 #assignment-table tbody tr:last-child td {
   border-bottom: none;
 }
-
-/* ===== Delte button =====*/
+/* ===== Delete Button ===== */
 .deleteBtn {
-  display: block;
-  margin: 0 auto 28px;
-  padding: 10px 30px;
+  padding: 5px 14px;
   background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  color: var(--secondary);
+  border: 1px solid rgba(225, 112, 85, 0.40);
+  border-radius: 50px;
+  color: var(--danger);
   font-family: 'Inter', sans-serif;
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
-  letter-spacing: 0.3px;
 }
+
 .deleteBtn:hover {
-  background: rgba(253, 121, 168, 0.08);
-  border-color: var(--secondary);
-  box-shadow: 0 0 20px rgba(253, 121, 168, 0.2);
-  transform: translateY(-1px);
+  background: rgba(225, 112, 85, 0.10);
+  border-color: var(--danger);
+  box-shadow: 0 0 12px rgba(225, 112, 85, 0.25);
 }
 
 /* ============================================
@@ -486,6 +487,9 @@ section::-webkit-scrollbar-thumb {
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   width: 33.33%;
   text-align: center;
+}
+.facts-table tbody tr:hover {
+  background: rgba(108, 99, 255, 0.07);
 }
 
 /* ============================================
