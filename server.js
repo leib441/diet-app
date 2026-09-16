@@ -15,6 +15,9 @@ import GoalRouter from './routes/goal.js';
 import session from 'express-session';
 
 const app = express();
+
+app.get('/health', (req, res) => res.send('OK'));
+
 app.use(express.static('project-files'));
 app.use(express.json());
 
@@ -44,6 +47,6 @@ app.use('/goal', GoalRouter);
 
 
 const port = process.env.PORT;
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
   console.log(`Server running on port ${port}`);
 });
