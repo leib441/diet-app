@@ -1,3 +1,12 @@
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION:', err.message);
+  console.error(err.stack);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('UNHANDLED REJECTION:', reason);
+});
+
 import express from 'express';
 import 'dotenv/config';
 import FormRouter from './routes/table.js';
