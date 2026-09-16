@@ -34,6 +34,7 @@ app.use('/table', FormRouter);
 app.use('/goal', GoalRouter);
 
 
-
-const port = process.env.PORT
-app.listen(port);
+const port = process.env.PORT;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
