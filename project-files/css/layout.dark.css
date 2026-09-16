@@ -1,0 +1,19 @@
+/* ============================================
+   DARK MODE — LAYOUT & HERO HEADER
+   ============================================ */
+
+body.dark .yiddish-word {
+  color: var(--text-muted);
+}
+
+body.dark h1 {
+  color: var(--text-primary);
+}
+
+body.dark h1::first-line {
+  color: var(--primary);
+}
+
+body.dark h2 {
+  color: var(--text-secondary);
+}

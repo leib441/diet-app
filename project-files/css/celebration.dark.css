@@ -1,0 +1,26 @@
+/* ============================================
+   DARK MODE — CELEBRATION OVERLAY
+   ============================================ */
+
+body.dark #celebration-overlay {
+  background: rgba(15, 17, 23, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+body.dark .celebration-title {
+  color: var(--primary);
+}
+
+body.dark #celebration-text {
+  color: var(--text-secondary);
+}
+
+body.dark .close-celebration-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+}
+
+body.dark .close-celebration-btn:hover {
+  box-shadow: 0 12px 32px rgba(107, 127, 248, 0.45);
+}

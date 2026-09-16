@@ -1,193 +1,451 @@
-/* ============================================
-   Weight Loss Tracker — Login Page
-   Matches Premium Dark UI Style
-   ============================================ */
- @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@700;800&display=swap');
 
-/* ===== CSS Variables — same as main ===== */
+/* ===== Variables ===== */
 :root {
-  --primary:        #7a72ff;
-  --primary-light:  #aba4fe;
-  --primary-dark:   #5040d9;
-  --secondary:      #fd85b3;
-  --accent:         #00d8d3;
+  --primary: #6c63ff;
+  --primary-hover: #574fd6;
+  --secondary: #ff6b9d;
+  --accent: #00d8d3;
 
-  --bg-dark:        #131220;
-  --bg-glass:       rgba(255, 255, 255, 0.055);
+  --bg-dark: #0f0e1a;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-input: rgba(255, 255, 255, 0.04);
 
-  --text-primary:   #ffffff;
-  --text-secondary: #b0b2cc;
-  --text-muted:     #64658a;
+  --text-primary: #f1f0ff;
+  --text-secondary: #9e9cc2;
+  --text-muted: #55557a;
 
-  --border:         rgba(255, 255, 255, 0.09);
-
-  --shadow-md:  0 8px 32px  rgba(0, 0, 0, 0.40);
-  --shadow-lg:  0 24px 64px rgba(0, 0, 0, 0.50);
-  --shadow-glow:0 0 50px    rgba(122, 114, 255, 0.25);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(108, 99, 255, 0.70);
 
   --radius-sm: 10px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
 
-  --ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --transition: all 0.3s var(--ease);
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+  --shadow-glow: 0 0 60px rgba(108, 99, 255, 0.20);
+  --shadow-btn: 0 6px 20px rgba(108, 99, 255, 0.40);
+
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ===== Reset ===== */
-*, *::before, *::after {
-  margin: 0; padding: 0;
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
-
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 /* ===== Body ===== */
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-dark);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(108, 99, 255, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 10%, rgba(255, 107, 157, 0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 55% 90%, rgba(0, 216, 211, 0.09) 0%, transparent 45%);
+  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
-  line-height: 1.65;
-  overflow: hidden;
-  background-image:
-    radial-gradient(ellipse at 15%  50%, rgba(122, 114, 255, 0.20) 0%, transparent 55%),
-    radial-gradient(ellipse at 85%  15%, rgba(253, 133, 179, 0.14) 0%, transparent 45%),
-    radial-gradient(ellipse at 60%  85%, rgba(0,  216, 211, 0.10) 0%, transparent 45%);
-  background-attachment: fixed;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
-
-/* ===== Wrapper — centers the card ===== */
+/* ===== Blur wrapper when dialog is open ===== */
+body:has(dialog.signDialog[open]) .wrapper {
+  filter: blur(6px) brightness(0.6);
+  pointer-events: none;
+  transition: filter 0.3s ease;
+}
+/* ===== Wrapper ===== */
 .wrapper {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 32px 20px;
+  gap: 16px;
+  transition: filter 0.3s ease;
 }
-
-/* ===== Login Card ===== */
 #logIn-container {
   position: relative;
-  background: var(--bg-glass);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid var(--border);
+  background: var(--bg-card);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
   border-radius: var(--radius-xl);
-  padding: 54px 52px 48px;
+  padding: 52px 48px 44px;
   width: 100%;
   max-width: 420px;
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  box-shadow: var(--shadow-card), var(--shadow-glow);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  animation: fadeSlideUp 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  gap: 14px;
+  animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-
-/* Rainbow top accent line — same as form-area */
 #logIn-container::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
 }
-
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(28px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    }
-}
-
-/* ===== Heading ===== */
-#logIn-container h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(22px, 4vw, 28px);
-  font-weight: 700;
+#logIn-container::after {
+  content: '🥗';
+  font-size: 38px;
   text-align: center;
-  line-height: 1.25;
-  background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 50%, var(--secondary) 100%);
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-dark);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  width: 58px;
+  height: 58px;
+  line-height: 54px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+#logIn-container h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 800;
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 2px;
+  background: linear-gradient(135deg, #ffffff 0%, #c8c4ff 50%, var(--secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 6px;
+  letter-spacing: -0.3px;
 }
-
-/* ===== Label ===== */
+#logIn-container p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 8px;
+}
 #logIn-container label {
   font-size: 11px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.4px;
+  margin-bottom: -6px;
 }
-
-/* ===== Password Input ===== */ #inputPass {
+/* ===== Login Inputs ===== */
+#inputName,
+#inputPass {
   width: 100%;
-  padding: 13px 17px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
+  padding: 13px 16px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   outline: none;
-  transition: var(--transition);
-  letter-spacing: 3px;        /* spaced-out password dots */
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
 }
-
-#inputPass:focus {
-  border-color: var(--primary);
-  background: rgba(122, 114, 255, 0.07);
-  box-shadow: 0 0 0 3px rgba(122, 114, 255, 0.14);
-}
-
+#inputName::placeholder,
 #inputPass::placeholder {
   color: var(--text-muted);
-  letter-spacing: 1px;
 }
-
-/* ===== Log In Button ===== */
+#inputName:focus,
+#inputPass:focus {
+  border-color: var(--border-focus);
+  background: rgba(108, 99, 255, 0.07);
+  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.12);
+}
+#inputName:valid:not(:placeholder-shown),
+#inputPass:valid:not(:placeholder-shown) {
+  border-color: rgba(0, 216, 211, 0.5);
+}
+/* ===== Login Button ===== */
 #logInBtn {
   width: 100%;
-  padding: 12px;
-  margin-top: 6px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  padding: 13px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-pill);
   color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: var(--shadow-btn);
+}
+#logInBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.55);
+}
+#logInBtn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-btn);
+}
+/* ===== Sign Up Button ===== */
+#signIn {
+  width: 100%;
+  max-width: 420px;
+  padding: 12px;
+  background: transparent;
+  border: 1.5px solid rgba(108, 99, 255, 0.45);
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all var(--transition);
+  animation: cardIn 0.5s 0.1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+#signIn::before {
+  content: "Don't have an account? ";
+  font-weight: 400;
+  color: var(--text-muted);
+}
+#signIn:hover {
+  background: rgba(108, 99, 255, 0.10);
+  border-color: var(--primary);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+#signIn:active {
+  transform: translateY(0);
+}
+/* ===== Dialog ===== */
+dialog.signDialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  background: #16142b;
+  border: 1px solid rgba(108, 99, 255, 0.30);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  width: 620px;
+  max-width: 97vw;
+  color: var(--text-primary);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(108, 99, 255, 0.15);
+  z-index: 999;
+  overflow: hidden;
+}
+dialog.signDialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: dialogIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+dialog.signDialog::backdrop {
+  background: rgba(0, 0, 0, 0.70);
+  backdrop-filter: blur(3px);
+}
+/* ===== Dialog Header ===== */
+.signDialog-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 52px 24px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(108, 99, 255, 0.05);
+}
+.signDialog-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+}
+.signDialog-icon {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.signDialog-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(18px, 3.5vw, 22px);
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #c8c4ff 50%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+.signDialog-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+/* ===== Dialog Input Groups ===== */
+.dialogInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 52px 0;
+}
+.dialogInputGroup--row {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+}
+.dialogField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+.dialogField--mid {
+  flex: 0.75;
+}
+/* ===== Dialog Labels ===== */
+dialog.signDialog h3 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-top: 12px;
+  white-space: nowrap;
+}
+dialog.signDialog h3:first-of-type {
+  margin-top: 0;
+}
+/* ===== Dialog Inputs ===== */
+dialog.signDialog input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(108, 99, 255, 0.30);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+dialog.signDialog input:focus {
+  border-color: var(--border-focus);
+  background: rgba(108, 99, 255, 0.07);
+  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.12);
+}
+dialog.signDialog input::placeholder {
+  color: var(--text-muted);
+}
+/* ===== Dialog Button Row ===== */
+.signDialog-btn-row {
+  display: flex;
+  gap: 20px;
+  padding: 24px 52px 32px;
+  margin-top: 8px;
+}
+/* ===== Confirm Button ===== */
+#signInBtn {
+  flex: 1;
+  padding: 11px 0;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  letter-spacing: 0.5px;
-  transition: var(--transition);
-  box-shadow: 0 4px 18px rgba(122, 114, 255, 0.38);
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.35);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
-
-#logInBtn::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-  opacity: 0;
-  transition: var(--transition);
-}
-
-#logInBtn:hover {
+#signInBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(122, 114, 255, 0.50);
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.50);
 }
-
-#logInBtn:hover::after { opacity: 1; }
-#logInBtn:active { transform: translateY(0); }
-
+#signInBtn:active {
+  transform: translateY(0);
+}
+/* ===== Cancel Button ===== */
+#cancelBtn {
+  flex: 1;
+  padding: 11px 0;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+#cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.30);
+  color: var(--text-primary);
+}
+#cancelBtn:active {
+  transform: scale(0.98);
+}
 /* ===== Scrollbar ===== */
-::-webkit-scrollbar       { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
 /* ===== Responsive ===== */
 @media (max-width: 480px) {
-  #logIn-container { padding: 40px 28px 36px; }
+  #logIn-container {
+    padding: 48px 26px 36px;
+  }
+  .signDialog-header {
+    padding: 28px 24px 20px;
+  }
+  .dialogInputGroup {
+    padding: 14px 24px 0;
+  }
+  .dialogInputGroup--row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .signDialog-btn-row {
+    flex-direction: column;
+    padding: 20px 24px 28px;
+  }
 }

@@ -1,0 +1,329 @@
+/* ============================================
+   GOAL DIALOG
+   ============================================ */
+#goalDialog {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  background: var(--bg-white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 40px 44px;
+  width: 380px;
+  max-width: 92vw;
+  color: var(--text-primary);
+  box-shadow: 0 24px 64px rgba(91, 110, 245, 0.16);
+  z-index: 200;
+}
+
+#goalDialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: dialogIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+#goalDialog::backdrop {
+  background: rgba(91, 110, 245, 0.12);
+  backdrop-filter: blur(5px);
+}
+
+#goal-lable {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+#goalInput {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-subtle);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: all var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+#goalInput::placeholder { color: var(--text-muted); }
+
+#goalInput:focus {
+  border-color: var(--border-focus);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(91, 110, 245, 0.10);
+}
+
+.dialog-btns {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+#confirmGoal {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: all var(--transition);
+}
+
+#confirmGoal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(91, 110, 245, 0.38);
+}
+
+#cancelGoal {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+#cancelGoal:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+/* ============================================
+   DELETE DIALOG
+   ============================================ */
+#deleteDialog {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  background: var(--bg-white);
+  border: 1.5px solid rgba(255, 79, 109, 0.20);
+  border-radius: var(--radius-xl);
+  padding: 36px 40px;
+  width: 360px;
+  max-width: 92vw;
+  color: var(--text-primary);
+  box-shadow: 0 20px 60px rgba(255, 79, 109, 0.12);
+  z-index: 200;
+}
+
+#deleteDialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: dialogIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+#deleteDialog::backdrop {
+  background: rgba(255, 79, 109, 0.08);
+  backdrop-filter: blur(5px);
+}
+
+#deleteDialog p {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.dialog-buttons { display: flex; gap: 12px; }
+
+#confirmYes {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: linear-gradient(135deg, var(--danger), #e03060);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(255, 79, 109, 0.30);
+  transition: all var(--transition);
+}
+
+#confirmYes:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(255, 79, 109, 0.42);
+}
+
+#confirmNo {
+  flex: 1;
+  padding: 12px 0;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+#confirmNo:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* ===== Shared Dialog Animation ===== */
+@keyframes dialogIn {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(0.94); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1);    }
+}
+
+/* Logout dialog */
+.logout-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  box-sizing: border-box;
+  width: min(420px, calc(100% - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 34px;
+  border: none;
+  border-radius: var(--radius-xl);
+  background: var(--bg-white);
+  color: var(--text-primary);
+  box-shadow: 0 24px 70px rgba(43, 50, 100, 0.25);
+  overflow: auto;
+}
+
+.logout-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: dialogIn 0.3s ease-out both;
+}
+
+.logout-dialog::backdrop {
+  background: rgba(29, 35, 72, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.logout-dialog h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.logout-dialog__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.logout-dialog__icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(86, 107, 255, 0.12);
+  color: var(--primary);
+}
+
+.logout-dialog__icon svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logout-dialog__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.dialog-btn {
+  min-width: 125px;
+  padding: 11px 20px;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dialog-btn:hover {
+  transform: translateY(-1px);
+}
+
+.dialog-btn:focus-visible {
+  outline: 3px solid rgba(97, 120, 255, 0.3);
+  outline-offset: 2px;
+}
+
+.cancel-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-white);
+  color: var(--text-secondary);
+}
+
+.cancel-btn:hover {
+  background: var(--bg-subtle);
+}
+
+.logout-btn {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+}
+
+.logout-btn:hover {
+  box-shadow: 0 7px 18px rgba(75, 92, 232, 0.35);
+}
+
+.logout-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+@media (max-width: 480px) {
+  .logout-dialog {
+    width: calc(100% - 24px);
+    max-height: calc(100vh - 24px);
+    padding: 28px 22px;
+  }
+
+  .logout-dialog__actions {
+    flex-direction: column-reverse;
+  }
+
+  .dialog-btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,170 @@
+/* Theme toggle */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+.switch input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 34px;
+  cursor: pointer;
+  background: var(--primary);
+  transition: background-color 0.3s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  bottom: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgb(234, 239, 247);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #3f5698;
+}
+
+input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+.icon-sun::before,
+.icon-moon::before {
+  display: block;
+  line-height: 0;
+}
+
+.icon-sun::before {
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%235c5f80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>');
+}
+
+.icon-moon::before {
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%235c5f80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>');
+}
+
+/* Main navbar */
+.settings {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: var(--nav-height);
+  padding: 0 24px;
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-nav);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.settings button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 130px;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--transition), background-color var(--transition), transform var(--transition);
+}
+
+.settings button:hover {
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.settings .get-all-btn {
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-pill);
+  background: var(--primary-light);
+  color: var(--primary);
+  box-shadow: 0 4px 14px rgba(91, 110, 245, 0.15);
+}
+
+.settings .get-all-btn:hover {
+  box-shadow: 0 4px 14px rgba(91, 110, 245, 0.45);
+}
+
+/* Current user and logout trigger */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.username-apper {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+#login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+#login-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.logout-icon,
+.logout-icon svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+.logout-icon svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

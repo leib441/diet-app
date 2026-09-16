@@ -1,0 +1,99 @@
+/* ============================================
+   DARK MODE — GOAL DIALOG
+   ============================================ */
+
+body.dark #goalDialog {
+  background: var(--bg-white);
+  border-color: var(--border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.50);
+  color: var(--text-primary);
+}
+
+body.dark #goalDialog::backdrop {
+  background: rgba(0, 0, 0, 0.50);
+  backdrop-filter: blur(5px);
+}
+
+body.dark #goal-lable {
+  color: var(--text-primary);
+}
+
+body.dark #goalInput {
+  background: var(--bg-subtle);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+body.dark #goalInput::placeholder {
+  color: var(--text-muted);
+}
+
+body.dark #goalInput:focus {
+  border-color: var(--border-focus);
+  background: #232640;
+  box-shadow: 0 0 0 4px rgba(107, 127, 248, 0.15);
+}
+
+body.dark #confirmGoal {
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  box-shadow: var(--shadow-btn);
+  color: #fff;
+}
+
+body.dark #confirmGoal:hover {
+  box-shadow: 0 10px 24px rgba(107, 127, 248, 0.45);
+}
+
+body.dark #cancelGoal {
+  background: var(--bg-subtle);
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+body.dark #cancelGoal:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+/* ============================================
+   DARK MODE — DELETE DIALOG
+   ============================================ */
+
+body.dark #deleteDialog {
+  background: var(--bg-white);
+  border-color: rgba(255, 107, 133, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.50);
+  color: var(--text-primary);
+}
+
+body.dark #deleteDialog::backdrop {
+  background: rgba(0, 0, 0, 0.50);
+  backdrop-filter: blur(5px);
+}
+
+body.dark #deleteDialog p {
+  color: var(--text-primary);
+}
+
+body.dark #confirmYes {
+  background: linear-gradient(135deg, var(--danger), #c02050);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(255, 107, 133, 0.35);
+}
+
+body.dark #confirmYes:hover {
+  box-shadow: 0 10px 26px rgba(255, 107, 133, 0.50);
+}
+
+body.dark #confirmNo {
+  background: var(--bg-subtle);
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+body.dark #confirmNo:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}

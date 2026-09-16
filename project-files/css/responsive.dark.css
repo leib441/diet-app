@@ -1,0 +1,29 @@
+/* ============================================
+   DARK MODE — FOOTER
+   ============================================ */
+
+body.dark footer.copyright {
+  background: var(--bg-white);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+body.dark footer.copyright .github-link {
+  color: var(--primary);
+}
+
+body.dark footer.copyright .github-link:hover {
+  color: var(--secondary);
+}
+
+/* ============================================
+   DARK MODE — SCROLLBAR
+   ============================================ */
+
+body.dark ::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: var(--primary);
+}

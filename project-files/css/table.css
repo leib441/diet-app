@@ -1,0 +1,176 @@
+/* ============================================
+   TABLE CONTAINER
+   ============================================ */
+.table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ============================================
+   MAIN TABLE
+   ============================================ */
+section {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+ /* overflow-x: auto;*/
+  background: var(--bg-white);
+  position: relative;
+  overflow: hidden;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+section > .section-heading,
+.summary-area > .section-heading {
+  padding: 24px 24px 30px;
+  margin: 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--bg-white), var(--bg-subtle));
+}
+
+.summary-area > .section-heading {
+  padding-bottom: 28px;
+  border-bottom-color: rgba(0, 201, 177, 0.20);
+}
+
+#weight-loss-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+#weight-loss-table thead tr {
+  background: var(--primary-light);
+  border-bottom: 2px solid var(--border);
+}
+
+#weight-loss-table th {
+  padding: 13px 20px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+#weight-loss-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+
+#weight-loss-table tbody tr:last-child { border-bottom: none; }
+
+#weight-loss-table tbody tr:nth-child(even) {
+  background: var(--bg-subtle);
+}
+
+#weight-loss-table tbody tr:hover {
+  background: var(--primary-light);
+  font-size: 14px;
+  transition: all var(--transition);
+  color: solid black;
+  font-weight: 650;
+}
+
+#weight-loss-table td {
+  padding: 14px 20px;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+#weight-loss-table td button {
+  padding: 6px 14px;
+  background: var(--danger-light);
+  border: 1.5px solid rgba(255, 79, 109, 0.20);
+  border-radius: var(--radius-pill);
+  color: var(--danger);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+#weight-loss-table td button:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 79, 109, 0.30);
+}
+
+/* ============================================
+   summaryS / summary TABLE
+   ============================================ */
+.summary-area {
+  position: relative;
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(0, 201, 177, 0.25);
+  box-shadow: 0 6px 24px rgba(0, 201, 177, 0.10);
+  background: var(--bg-white);
+}
+
+.summary-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  z-index: 1;
+}
+
+.summarys-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.summarys-table thead tr {
+  background: var(--accent-light);
+  border-bottom: 2px solid rgba(0, 201, 177, 0.20);
+}
+
+.summarys-table th {
+  padding: 13px 20px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.summarys-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+
+.summarys-table tbody tr:hover { background: var(--accent-light); }
+.summarys-table tbody tr:last-child { border-bottom: none; }
+
+.summarys-table td {
+  padding: 14px 20px;
+  color: var(--text-primary);
+  font-weight: 500;
+}

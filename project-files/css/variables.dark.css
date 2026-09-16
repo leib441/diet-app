@@ -1,0 +1,40 @@
+/* ============================================
+   DARK MODE — VARIABLES, RESET, BODY
+   ============================================ */
+
+body.dark {
+  --primary:        #6b7ff8;
+  --primary-hover:  #5468f5;
+  --primary-light:  #1e2240;
+  --secondary:      #ff7eb3;
+  --accent:         #00d4bc;
+  --accent-light:   #0d2420;
+  --danger:         #ff6b85;
+  --danger-light:   #2a1520;
+  --warning:        #ffb74d;
+  --success:        #00d4bc;
+
+  --bg:             #0f1117;
+  --bg-white:       #1a1d2e;
+  --bg-subtle:      #1e2130;
+
+  --text-primary:   #e8eaf6;
+  --text-secondary: #9ba3c9;
+  --text-muted:     #5c6080;
+
+  --border:         #2a2d45;
+  --border-focus:   #6b7ff8;
+
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.30);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.40);
+  --shadow-btn:  0 6px 20px rgba(107, 127, 248, 0.35);
+  --shadow-nav:  0 2px 20px rgba(0, 0, 0, 0.40);
+}
+
+body.dark {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 10% 20%, rgba(107, 127, 248, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(255, 107, 157, 0.05) 0%, transparent 50%);
+  color: var(--text-primary);
+}

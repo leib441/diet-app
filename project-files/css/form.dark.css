@@ -1,0 +1,62 @@
+/* ============================================
+   DARK MODE — FORM CARD
+   ============================================ */
+
+body.dark .form-area {
+  background: var(--bg-white);
+  border-color: var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+body.dark .form-area::before {
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+}
+
+body.dark .form-group h3 {
+  color: var(--text-secondary);
+}
+
+body.dark .required::after {
+  color: var(--secondary);
+}
+
+/* ===== Inputs ===== */
+body.dark .input-box {
+  background: var(--bg-subtle);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+body.dark .input-box::placeholder {
+  color: var(--text-muted);
+}
+
+body.dark .input-box:focus {
+  border-color: var(--border-focus);
+  background: #232640;
+  box-shadow: 0 0 0 4px rgba(107, 127, 248, 0.15);
+}
+
+body.dark .input-box:valid:not(:placeholder-shown) {
+  border-color: var(--accent);
+}
+
+body.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+}
+
+/* ===== Submit Button ===== */
+body.dark .submit-button {
+   background: var(--primary-light);
+  border-color: rgba(107, 127, 248, 0.30);
+  color: var(--primary);
+}
+
+body.dark .submit-button:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(107, 127, 248, 0.35);
+}
+

@@ -1,0 +1,83 @@
+/* ============================================
+   DARK MODE — MAIN TABLE
+   ============================================ */
+
+body.dark section {
+  background: var(--bg-white);
+  border-color: var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+body.dark #assignment-table {
+  color: var(--text-primary);
+}
+
+body.dark #assignment-table thead tr {
+  background: var(--primary-light);
+  border-bottom: 2px solid var(--border);
+}
+
+body.dark #assignment-table th {
+  color: var(--primary);
+}
+
+body.dark #assignment-table tbody tr {
+  border-bottom: 1px solid var(--border);
+}
+
+body.dark #assignment-table tbody tr:nth-child(even) {
+  background: var(--bg-subtle);
+}
+
+body.dark #assignment-table tbody tr:hover {
+  background: var(--primary-light);
+}
+
+body.dark #assignment-table td {
+  color: var(--text-primary);
+}
+
+/* Delete button */
+body.dark #assignment-table td button {
+  background: var(--danger-light);
+  border-color: rgba(255, 107, 133, 0.25);
+  color: var(--danger);
+}
+
+body.dark #assignment-table td button:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 107, 133, 0.35);
+}
+
+/* ============================================
+   DARK MODE — summaryS / summary TABLE
+   ============================================ */
+
+body.dark .summary-area {
+  background: var(--bg-white);
+  border-color: rgba(0, 212, 188, 0.20);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.30);
+}
+
+body.dark .summarys-table thead tr {
+  background: var(--accent-light);
+  border-bottom: 2px solid rgba(0, 212, 188, 0.15);
+}
+
+body.dark .summarys-table th {
+  color: var(--accent);
+}
+
+body.dark .summarys-table tbody tr {
+  border-bottom: 1px solid var(--border);
+}
+
+body.dark .summarys-table tbody tr:hover {
+  background: var(--accent-light);
+}
+
+body.dark .summarys-table td {
+  color: var(--text-primary);
+}

@@ -1,0 +1,63 @@
+/* ============================================
+   DARK MODE — NAVBAR & THEME TOGGLE
+   ============================================ */
+
+body.dark .settings {
+  background: rgba(26, 29, 46, 0.95);
+  
+}
+
+body.dark .settings button {
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+}
+
+body.dark .settings button:hover {
+  color: var(--primary);
+  background: rgba(107, 127, 248, 0.12);
+  box-shadow: inset 0 -2px 0 rgba(107, 127, 248, 0.7);
+}
+
+body.dark .settings .get-all-btn{
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 4px 14px rgba(107, 127, 248, 0.20);
+}
+
+body.dark .settings .get-all-btn:hover{
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  box-shadow: var(--shadow-btn);
+  color: #fff;
+  transform: translateY(-1px);
+}
+body.dark #login-btn {
+  color: var(--text-primary);
+  background: var(--bg-white);
+}
+
+body.dark #username {
+ background:  #3f5698;
+  color: #c8cde8;
+}
+
+/* Dark toggle icons — white stroke */
+body.dark .icon-sun::before {
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%239ba3c9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>');
+}
+
+body.dark .icon-moon::before {
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%239ba3c9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>');
+}
+
+body.dark .slider {
+  background: #3f5698;
+}
+
+body.dark input:checked + .slider {
+  background-color: var(--primary);
+}
+
+body.dark .slider::before {
+  background-color: #c8cde8;
+}

@@ -4,28 +4,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table</title>
+    <title>Weight Loss Tracker</title>
     <script src="./table.js"></script>
-    <link id="main-style" rel="stylesheet" href="style.css">
 
+    <link class="theme-light" rel="stylesheet" href="./css/variables.css">
+    <link class="theme-light" rel="stylesheet" href="./css/navbar.css">
+    <link class="theme-light" rel="stylesheet" href="./css/layout.css">
+    <link class="theme-light" rel="stylesheet" href="./css/form.css">
+    <link class="theme-light" rel="stylesheet" href="./css/table.css">
+    <link class="theme-light" rel="stylesheet" href="./css/search.css">
+    <link class="theme-light" rel="stylesheet" href="./css/dialogs.css">
+    <link class="theme-light" rel="stylesheet" href="./css/celebration.css">
+    <link class="theme-light" rel="stylesheet" href="./css/responsive.css">
+    <!-- Dark mode files -->
+    <link rel="stylesheet" href="./css/variables.dark.css">
+    <link rel="stylesheet" href="./css/navbar.dark.css">
+    <link rel="stylesheet" href="./css/layout.dark.css">
+    <link rel="stylesheet" href="./css/form.dark.css">
+    <link rel="stylesheet" href="./css/table.dark.css">
+    <link rel="stylesheet" href="./css/search.dark.css">
+    <link rel="stylesheet" href="./css/dialogs.dark.css">
+    <link rel="stylesheet" href="./css/celebration.dark.css">
+    <link rel="stylesheet" href="./css/responsive.dark.css">
 </head>
 
 <body>
     <div class="settings">
-        <button class="style-btn">Change style</button>
+        <div class="theme-toggle">
+            <span class="icon-sun"></span>
+            <label class="switch">
+                <input type="checkbox" id="themeToggle" />
+                <span class="slider"></span>
+            </label>
+            <span class="icon-moon"></span>
+        </div>
+
         <button class="scroll-table-btn">Scroll To Table</button>
-        <button class="more-detailes">Weight-Loss Statistics </button>
+        <button class="summary">Weight-Loss Statistics </button>
         <button class="scroll-search">Search</button>
+        <button class="set-goal-btn">Set A Goal</button>
+        <button class="get-all-btn" style="display: none">Get All Rows Back</button>
+        <button id="stop-song-btn-on-page" onclick="stopSong();" style="display: none">⏹ Stop Song</button>
+
+        <div class="user-menu">
+            <p class="username-apper"></p>
+            <button id="login-btn" type="button" aria-label="Log out">
+                <span class="logout-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                    </svg>
+                </span>
+            </button>
+        </div>
     </div>
 
     <div class="allPage">
-        <div class="container">
+        <div class="containers">
             <p class="yiddish-word">בעזרת השם יתברך</p>
-            <h1>Welcome To Our Weight loss Management Table!</h1>
-            <h2>Here we can manage our weight loss week by week</h2>
+            <h1>Welcome To The Weight loss Management Table!</h1>
+            <h2>Here you can manage your weight loss week by week</h2>
 
-            <div class="form-area">
-                <form id="assignment-form" method="post">
+            <div class="form-area" aria-labelledby="check-in-heading">
+                <h3 class="section-heading" id="check-in-heading">Add A Weekly Entry</h3>
+                <form id="weight-loss-form" method="post">
                     <div class="form-group">
                         <label for="date">
                             <h3 class="required">Please select a date:</h3>
@@ -52,11 +93,28 @@
             </div>
 
             <div class="table-container">
-                <div class="search-form">
+
+                <section aria-labelledby="progress-heading">
+                    <h3 class="section-heading" id="progress-heading">My Entries</h3>
+                    <table id="weight-loss-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>My Weight</th>
+                                <th>Weight Lost Since Last Week</th>
+                                <th>Comments</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weight-loss-list"></tbody>
+                    </table>
+                </section>
+                <div class="search-form" aria-labelledby="search-heading">
+                    <h3 class="section-heading" id="search-heading">Search A Entry</h3>
                     <div class="search-group">
                         <p>Search by Date:</p>
-                        <input id="search" class="search-input-box" type="date" />
-                        <button id="search-btn">Search</button>
+                        <input id="search-date" class="search-input-box" type="date" />
+                        <button id="search-date-btn">Search</button>
                     </div>
                     <div class="search-group">
                         <p>Search by Weight:</p>
@@ -65,51 +123,91 @@
                         <button id="search-weight-btn">Search</button>
                     </div>
                 </div>
-                <section>
-                    <table id="assignment-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>My Weight</th>
-                                <th>Weight Lost Since Last Week</th>
-                                <th>Comments</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="assignment-list"></tbody>
-                    </table>
-                </section>
-                <div class="fact-area">
-                    <table class="facts-table">
+
+                <div class="summary-area" aria-labelledby="summary-heading">
+                    <h3 class="section-heading" id="summary-heading">Summary</h3>
+                    <table class="summarys-table">
                         <thead>
                             <tr>
                                 <th>Total Weeks</th>
-                                <th>Avrage Weight Lost (weekly)</th>
+                                <th>Average Weight Lost (weekly)</th>
                                 <th>Total Weight Lost</th>
-                                <th>I Still Have To Loss</th>
+                                <th>I Still Have To Lose</th>
                                 <th>Mission Accomplished</th>
+                                <th>Weight Goal</th>
                             </tr>
                         </thead>
-                        <tbody id="facts-list"></tbody>
+                        <tbody id="summarys-list"></tbody>
                     </table>
                 </div>
             </div>
         </div>
         <footer class="copyright">
+
             <p>&copy;2026. All rights reserved. L,F, Developers</p>
+                 <a class="github-link"
+                    href="https://github.com/leib441/diet-app" target="_blank" rel="noopener noreferrer"
+                    onclick="window.open(this.href, '_blank', 'noopener,noreferrer');">
+                    My GitHub Repository</a>
         </footer>
     </div>
 
-    <!-- ✅ Celebration Overlay -->
+    <!--dialogs & hidden items -->
+    <!--celebration-->
     <div id="celebration-overlay">
         <canvas id="fireworks-canvas"></canvas>
         <div class="celebration-box">
             <div class="celebration-emoji">🎉🎊🏆</div>
             <h1 class="celebration-title">WOW WOW!!</h1>
             <p id="celebration-text">You lost X lbs!</p>
+            <button id="stop-song-btn" onclick="stopSong();" style="display: none">⏹ Stop Song</button>
             <button class="close-celebration-btn" onclick="closeCelebration()">Go Back To Table</button>
         </div>
     </div>
+
+    <!--set goal-->
+    <dialog id="goalDialog">
+        <h3 id="goal-lable">Set Goal Weight</h3>
+        <input type="number" id="goalInput" placeholder="Enter goal weight (lbs)" />
+        <div class="dialog-btns">
+            <button id="cancelGoal">Cancel</button>
+            <button id="confirmGoal">Confirm</button>
+        </div>
+    </dialog>
+
+    <!--delete data-->
+    <dialog id="deleteDialog">
+        <p>Are you sure you want to delete this entry?</p>
+        <div class="dialog-buttons">
+            <button id="confirmNo">Cancel</button>
+            <button id="confirmYes">Yes, Delete</button>
+        </div>
+    </dialog>
+
+    <!--log out-->
+    <dialog id="logOutDialog" class="logout-dialog">
+        <div class="logout-dialog__content">
+            <div class="logout-dialog__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                </svg>
+            </div>
+            <h4>Are you sure you want to log out of your account?</h4>
+        </div>
+        <div class="logout-dialog__actions">
+            <button type="button" id="cancelLogOut" class="dialog-btn cancel-btn">
+                Cancel
+            </button>
+
+            <button type="button" id="confirmLogOut" class="dialog-btn logout-btn">
+                Log Out
+            </button>
+        </div>
+    </dialog>
+
+    <audio id="celebration-audio" preload="auto">
+        <source src="./audio/song.mp3" type="audio/mpeg">
+    </audio>
 </body>
 
 </html>

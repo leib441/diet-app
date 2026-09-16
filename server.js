@@ -1,61 +1,39 @@
 import express from 'express';
-import knex from 'knex';
 import 'dotenv/config';
+import FormRouter from './routes/table.js';
+import LoginRouter from './routes/auto.js';
+import GoalRouter from './routes/goal.js';
+import session from 'express-session';
+
 const app = express();
-
 app.use(express.static('project-files'));
-app.use(express.json())
+app.use(express.json());
 
-const database = knex({
-    client: 'pg',
-    connection: {
-        connectionString: process.env.DATABASE_URL,
-        ssl: process.env.NODE_ENV === 'production' 
-            ? { rejectUnauthorized: false } 
-            : false
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {}
+}));
+
+
+app.use((req, res, next) => {
+    if(req.path === '/auth/log-in' || req.path === '/auth/sign-in' || req.path === '/auto/log-out') {
+        return next();
     }
+    if (req.session.isAuthenticated) {
+        return next();
+    }
+    res.status(401).json({ success: false, message: 'Unauthorized' });
 });
 
-app.post('/log-in', (req, res) => {
-    const { password } = req.body;
-    if (password === process.env.PASSWORD) {
-          res.json({ success: true ,  window: 'table.html' , target: '_self' });
-    } else {
-        res.json({ success: false });
-    }
-});
+app.use('/auth', LoginRouter );
 
-app.post('/send', async (req, res) => {
-    const { date, weight, comment } = req.body;
-    try {
-        await database('diet_table').insert({
-            date: date,
-            weight: weight,
-            comment: comment,
-        })
-        const allRows = await database('diet_table').select('*').orderBy('date', 'asc');
-        res.json({success: true, data: allRows })
-    } catch (error) {
-       res.json({success: false});
-    }
-})
+app.use('/table', FormRouter);
 
-app.get('/get', async (req, res) => {
-    try{
-    const allRows = await database('diet_table').select('*').orderBy('date', 'asc');
-    res.json({success: true, data: allRows});
-   } catch (error) {
-        res.json({success: false}); 
-    }
-});
+app.use('/goal', GoalRouter);
 
-app.delete('/delete', async (req, res) => { 
-    try{
-await database('diet_table').where('id' , req.body.id).delete();
-res.json({success: true})
-    }catch{
-          res.json({ success: false}); 
-    }
-});
-const port = 4000;
+
+
+const port = process.env.PORT
 app.listen(port);

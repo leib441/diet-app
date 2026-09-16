@@ -2,25 +2,66 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weight Loss Tracker</title>
-
-    <link id="main-style" rel="stylesheet" href="log-in.css">
-    <script src="./log-in.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weight Loss Tracker</title>
+  <link rel="stylesheet" href="log-in.css">
 </head>
 
 <body>
+  <div class="wrapper">
+    <form id="logIn-container">
+      <h2>Welcome To Your Diet Table</h2>
+      <p>Please Log In</p>
+      <label for="inputName">Username:</label>
+      <input type="text" id="inputName" required />
+      <label for="inputPass">Password:</label>
+      <input type="password" id="inputPass" required />
+      <button id="logInBtn" type="submit">Log In</button>
+    </form>
+    <button id="signIn">Sign Up</button>
+  </div>
 
-    <div class="wrapper">
-        <form id="logIn-container">
-            <h2>Welcome To My Diet Table</h2>
-            <label for="inputPass">Please Log In</label>
-            <input type="password" id="inputPass" required />
-            <button id="logInBtn" type="submit">Log In</button>
-        </form>
+  <dialog class="signDialog">
+    <div class="signDialog-header">
+      <span class="signDialog-icon">✨</span>
+      <h2 class="signDialog-title">Create Account</h2>
+      <p class="signDialog-sub">Join your Diet Table</p>
     </div>
+
+    <div class="dialogInputGroup dialogInputGroup--row">
+      <div class="dialogField">
+        <h3>First Name</h3>
+        <input type="text" id="inputSignFName" placeholder="John" required />
+      </div>
+      <div class="dialogField dialogField--mid">
+        <h3>Middle Name</h3>
+        <input type="text" id="inputSignMName" placeholder="(optional)" />
+      </div>
+      <div class="dialogField">
+        <h3>Last Name</h3>
+        <input type="text" id="inputSignLName" placeholder="Doe" required />
+      </div>
+    </div>
+
+    <div class="dialogInputGroup dialogInputGroup--row">
+      <div class="dialogField">
+        <h3>Username</h3>
+        <input type="text" id="inputUsername" placeholder="Enter username" required />
+      </div>
+      <div class="dialogField">
+        <h3>Password</h3>
+        <input type="password" id="inputSignPass" placeholder="Enter password" required />
+      </div>
+    </div>
+
+    <div class="signDialog-btn-row">
+      <button id="signInBtn" type="submit">Confirm</button>
+      <button id="cancelBtn" type="button">Cancel</button>
+    </div>
+  </dialog>
+
+  <script src="./log-in.js"></script>
 </body>
 
 </html>
