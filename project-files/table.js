@@ -300,7 +300,8 @@ function deleteData() {
         const result = await request.json();
         if (result.success) {
             event.target.closest('tr').remove();
-            calculations();
+            allRows = document.querySelectorAll('#weight-loss-list tr');
+            calculations(allRows);
         } else {
             console.error('Delete failed', result.error);
         }

@@ -20,7 +20,7 @@ export const setLogIn = async (first, middle, last, name, password) => {
     })
     .returning(['id', 'first_name', 'last_name']);
 
-    await db('settings').insert({
+    await db('goal_table').insert({
         user_id: newUser.id
     });
 
