@@ -114,6 +114,7 @@ function setGoal() {
 
         dialog.showModal();
         confirmBtn.addEventListener('click', async () => {
+            if (!input.value) return alert('Please enter a valid goal.');
             const newGoal = Number(input.value);
             if (!newGoal) return;
             await sendGoal(newGoal);
@@ -151,6 +152,7 @@ async function sendGoal(newGoal) {
 function submitForm() {
     document.querySelector('#submit').addEventListener('click', async (event) => {
         event.preventDefault();
+        if (goal === '-') return alert('Please set a goal to continue using the app.');
         const date = document.querySelector('#date').value;
         const weight = document.querySelector('#weight').value;
         if (!date || !weight) return alert('Please Fill Out All Fields!');
@@ -238,7 +240,7 @@ function trToTable(row, table) {
 
 //search
 function search() {
-     const refreshTable = document.querySelector('.get-all-btn');
+    const refreshTable = document.querySelector('.get-all-btn');
     const summaryArea = document.querySelector('.summary-area');
     async function getBackAll() {
         await getTable();
@@ -272,7 +274,7 @@ function search() {
                 myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 summaryArea.style.display = 'none';
             } else {
-               alert('No matching data found for the given search criteria.');
+                alert('No matching data found for the given search criteria.');
             }
 
             document.querySelector('#search-date').value = '';
