@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     scrollSearch();
     await getTable(allRows);
     setGoal();
-    clickUsername()
+    clickLogOut();
     submitForm();
     deleteData();
     search();
@@ -64,19 +64,18 @@ function scrollSearch() {
     })
 }
 
-function clickUsername() {
-    const usernameBtn = document.querySelector('#login-btn');
+function clickLogOut() {
+    const logOutBtn = document.querySelector('#logout-btn');
     const confirmBtn = document.querySelector('#confirmLogOut');
     const cancelBtn = document.querySelector('#cancelLogOut');
     const dialog = document.querySelector('#logOutDialog');
 
-    usernameBtn.addEventListener('click', () => {
-        if (usernameBtn.textContent !== 'Log In') {
-            dialog.showModal();
-        } else {
-            window.location.href = '/index.html'
+    logOutBtn.addEventListener('click', () => {
+         if(document.querySelector('.username-apper').textContent === ''){
+             window.location.href = '/index.html';
+        }else{
+        dialog.showModal();
         }
-
     })
     confirmBtn.addEventListener('click', async () => {
         await logOut();
@@ -97,7 +96,9 @@ async function logOut() {
         credentials: 'include'
     })
     const result = await request.json();
-    if (result.success) {
+    if (!result.success) {
+        console.error('Logout failed', result.error);
+    } else {
         window.location.href = '/index.html'
     }
 }
