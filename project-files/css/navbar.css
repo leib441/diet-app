@@ -136,7 +136,7 @@ input:checked + .slider::before {
   white-space: nowrap;
 }
 
-#login-btn {
+#logout-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -149,7 +149,7 @@ input:checked + .slider::before {
   color: var(--primary);
 }
 
-#login-btn:hover {
+#logout-btn:hover {
   background: var(--primary);
   color: #fff;
 }
