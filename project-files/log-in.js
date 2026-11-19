@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    closeOverlaysOnOutsideClick();
+
     document.querySelector('#logInBtn').addEventListener('click', async function (event) {
         event.preventDefault();
         await logIn();
@@ -41,6 +43,7 @@ async function signIn() {
     const lastName = document.querySelector('#inputSignLName').value;
     const userName = document.querySelector('#inputUsername').value;
     const userPass = document.querySelector('#inputSignPass').value;
+    const email = document.querySelector('#inputEmail').value;
 
     const request = await fetch('/auth/sign-in', {
         method: 'POST',
@@ -50,7 +53,8 @@ async function signIn() {
             middle: middleName,
             last: lastName,
             name: userName,
-            password: userPass
+            password: userPass,
+            email: email
         })
     });
     const result = await request.json();
@@ -60,5 +64,6 @@ async function signIn() {
     document.querySelector('#inputSignLName').value = '';
     document.querySelector('#inputUsername').value = '';
     document.querySelector('#inputSignPass').value = '';
+    document.querySelector('#inputEmail').value = '';
     document.querySelector('.signDialog').close();
 }

@@ -1,0 +1,55 @@
+/* ============================================
+   DARK MODE — CHAT
+   ============================================ */
+
+body.dark .chat-fab {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .chat-dialog {
+  background: var(--bg-white);
+  border-left-color: var(--border);
+  box-shadow: -16px 0 48px rgba(0, 0, 0, 0.45);
+  color: var(--text-primary);
+}
+
+body.dark .chat-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+body.dark .chat-dialog__header,
+body.dark .chat-dialog__form {
+  background: var(--bg-subtle);
+  border-color: var(--border);
+}
+
+body.dark .chat-dialog__messages {
+  background: var(--bg);
+}
+
+body.dark .chat-bubble.assistant {
+  background: var(--primary-light);
+  color: var(--text-primary);
+}
+
+body.dark .chat-dialog__close {
+  background: var(--bg-white);
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+body.dark .chat-dialog__close:hover {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+body.dark #new-message {
+  background: var(--bg);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+body.dark #new-message:focus {
+  background: var(--bg-white);
+  border-color: var(--border-focus);
+}

@@ -10,7 +10,7 @@ body.dark h1 {
   color: var(--text-primary);
 }
 
-body.dark h1::first-line {
+body.dark h1.welcome-title {
   color: var(--primary);
 }
 

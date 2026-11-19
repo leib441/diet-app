@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { realPassword, setLogIn } from '../services/auto.js';
+import { realPassword, sendWelcomeEmail, setLogIn } from '../services/auto.js';
 
 const router = Router();
 
@@ -31,12 +31,18 @@ router.post('/log-in', async (req, res) => {
 });
 
 router.post('/sign-in', async (req, res) => {
-    const {first, middle, last, name, password } = req.body;
+    const {first, middle, last, name, password , email} = req.body;
     try {
 
-        const sendNewPass = await setLogIn(first, middle, last, name, password );
+        const sendNewPass = await setLogIn(first, middle, last, name, password , email);
         req.session.isAuthenticated = true;
         req.session.userId = sendNewPass.id; 
+
+        try {
+            await sendWelcomeEmail({ first, last, name, email });
+        } catch (error) {
+            console.error('welcome email error:', error.message);
+        }
 
         res.json({ success: true, data: sendNewPass });
     } catch (error) {

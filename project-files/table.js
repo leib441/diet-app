@@ -2,12 +2,14 @@ let table;
 let goal = '-';
 let btn;
 let allRows;
+let openGoalAfterHowItWorks = false;
 
 //all document
 document.addEventListener('DOMContentLoaded', async function () {
 
     table = document.querySelector('#weight-loss-list');
     btn = document.querySelector('.scroll-table-btn');
+    closeOverlaysOnOutsideClick();
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 100) {
@@ -18,26 +20,46 @@ document.addEventListener('DOMContentLoaded', async function () {
     })
 
     scrollButton();
+    howItWorksDialog();
     changeStyle();
     scrollSummary();
     scrollSearch();
-    await getTable(allRows);
+    scrollLatestEntry();
     setGoal();
     clickLogOut();
     submitForm();
     deleteData();
     search();
+
+    await getTable();
 });
 
 
-//settings
+//UI-features-settings-etc
 function changeStyle() {
     document.querySelector('#themeToggle').addEventListener('change', function () {
         document.body.classList.toggle('dark', this.checked);
     });
 }
+function howItWorksDialog() {
+    const dialog = document.querySelector('#howItWorksDialog');
+    document.querySelector('#howItWorksBtn').addEventListener('click', (event) => {
+        event.preventDefault();
+        dialog.showModal();
+    });
+    document.querySelector('#closeHowItWorks').addEventListener('click', () => {
+        dialog.close();
+    });
+    dialog.addEventListener('cancel', (event) => {
+        event.preventDefault();
+    });
+    dialog.addEventListener('close', () => {
+        if (!openGoalAfterHowItWorks) return;
+        openGoalAfterHowItWorks = false;
+        openGoalDialog();
+    });
+}
 function scrollButton() {
-
     btn.addEventListener('click', (event) => {
         event.preventDefault();
         if (btn.innerHTML === 'Scroll To Table') {
@@ -60,23 +82,38 @@ function scrollSearch() {
     document.querySelector('.scroll-search').addEventListener('click', (event) => {
         event.preventDefault();
         const searchArea = document.querySelector('.search-form');
-        searchArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        searchArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
     })
+}
+function scrollLatestEntry() {
+    document.querySelector('.latest-entry').addEventListener('click', (event) => {
+        event.preventDefault();
+        const latestEntry = table.lastElementChild;
+        if (latestEntry) {
+            latestEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+}
+function updateLatestEntryBtn() {
+    const lastEntryBtn = document.querySelector('.latest-entry');
+    lastEntryBtn.style.display = table.children.length === 0 ? 'none' : 'block';
 }
 
 function clickLogOut() {
-    const logOutBtn = document.querySelector('#logout-btn');
+    const logOutBtn = document.querySelector('#logOutBtn');
     const confirmBtn = document.querySelector('#confirmLogOut');
     const cancelBtn = document.querySelector('#cancelLogOut');
     const dialog = document.querySelector('#logOutDialog');
 
     logOutBtn.addEventListener('click', () => {
-         if(document.querySelector('.username-apper').textContent === ''){
-             window.location.href = '/index.html';
-        }else{
-        dialog.showModal();
+        const username = document.querySelector('.username-apper');
+
+        if (username.textContent.trim() === 'Log In') {
+            window.location.href = '/index.html';
+            return;
         }
-    })
+        dialog.showModal();
+    });
     confirmBtn.addEventListener('click', async () => {
         await logOut();
         dialog.close();
@@ -84,11 +121,6 @@ function clickLogOut() {
     cancelBtn.addEventListener('click', () => {
         dialog.close();
     })
-    dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) {
-            dialog.close();
-        }
-    });
 }
 async function logOut() {
     const request = await fetch('/auth/log-out', {
@@ -96,64 +128,76 @@ async function logOut() {
         credentials: 'include'
     })
     const result = await request.json();
-    if (!result.success) {
-        console.error('Logout failed', result.error);
-    } else {
+    if (result.success) {
         window.location.href = '/index.html'
     }
 }
-
+function showNormalView() {
+    document.querySelector('.summary-area').style.display = 'block';
+    document.querySelector('.get-all-btn').style.display = 'none';
+}
 //form
 function setGoal() {
-    document.querySelector('.set-goal-btn').addEventListener('click', async (event) => {
+    const goalDialog = document.querySelector('#goalDialog');
+    const goalDialogInput = document.querySelector('#goalDialogInput');
+
+    document.querySelector('#edit-goal-btn').addEventListener('click', (event) => {
         event.preventDefault();
-
-        const dialog = document.querySelector('#goalDialog');
-        const confirmBtn = document.querySelector('#confirmGoal');
-        const cancelBtn = document.querySelector('#cancelGoal');
-        const input = document.querySelector('#goalInput');
-
-        dialog.showModal();
-        confirmBtn.addEventListener('click', async () => {
-            if (!input.value) return alert('Please enter a valid goal.');
-            const newGoal = Number(input.value);
-            if (!newGoal) return;
-            await sendGoal(newGoal);
-            input.value = '';
-            dialog.close();
-            const lable = document.querySelector('#goal-lable');
-            lable.innerHTML = `Goal is now: '${goal}'`;
-        });
-        cancelBtn.addEventListener('click', () => {
-            input.value = '';
-            dialog.close();
-        });
+        document.querySelector('.settings-dropdown').open = false;
+        openGoalDialog();
     });
+
+    document.querySelector('#confirmGoal').addEventListener('click', async (event) => {
+        event.preventDefault();
+        if (!goalDialogInput.value) return alert('Type the weight you want to reach, in pounds.');
+        const saved = await sendGoal(Number(goalDialogInput.value));
+        if (!saved) return;
+        goalDialogInput.value = '';
+        goalDialog.close();
+    });
+    document.querySelector('#cancelGoal').addEventListener('click', () => {
+        goalDialogInput.value = '';
+        goalDialog.close();
+    });
+}
+function openGoalDialog() {
+    const goalDialog = document.querySelector('#goalDialog');
+    const goalDialogInput = document.querySelector('#goalDialogInput');
+    if (!goalDialog || goalDialog.open) return;
+    goalDialog.showModal();
+    goalDialogInput.focus();
+}
+function promptGoalSetup() {
+    const howItWorksDialog = document.querySelector('#howItWorksDialog');
+    openGoalAfterHowItWorks = true;
+    if (howItWorksDialog.open) return;
+    howItWorksDialog.showModal();
 }
 async function sendGoal(newGoal) {
     let request;
-    request = await fetch('/goal/update', {
-        method: 'put',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ goal: Number(newGoal) })
-    });
+    try {
+        request = await fetch('/goal/update', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ goal: Number(newGoal) })
+        });
+    } catch (error) {
+        console.error('Failed to update goal:', error);
+        alert('Could not save that goal.');
+        return false;
+    }
 
     const result = await request.json();
-    if (!result.success) return;
+    if (!result.success) return console.error('Failed to update goal:', result.error);
     goal = Number(result.data);
-    const allRows = document.querySelectorAll('#weight-loss-list tr');
-    const howmanyToGo = needToLoss(allRows);
-    const percent = goalPercent(allRows);
-    const summaryCells = document.querySelectorAll('#summarys-list tr td');
-
-    summaryCells[3].textContent = howmanyToGo;
-    summaryCells[4].textContent = percent + '%';
-    summaryCells[5].textContent = goal + ' lb';
+    document.querySelector('#goal-display').textContent = goal;
+    calculations();
+    return true;
 }
 function submitForm() {
     document.querySelector('#submit').addEventListener('click', async (event) => {
         event.preventDefault();
-        if (goal === '-') return alert('Please set a goal to continue using the app.');
+        if (goal === '-') return openGoalDialog();
         const date = document.querySelector('#date').value;
         const weight = document.querySelector('#weight').value;
         if (!date || !weight) return alert('Please Fill Out All Fields!');
@@ -177,13 +221,14 @@ async function sendData() {
         body: JSON.stringify({ date, weight, comment })
     });
     const result = await request.json();
-    if (!result.success) return console.error('Failed to fetch data:', result.error);
+    if (!result.success) return console.error('Failed to fetch data:', result.error || result.message);
     table.innerHTML = '';
     result.data.forEach(row => {
         trToTable(row, table);
     });
-    allRows = document.querySelectorAll('#weight-loss-list tr');
-    calculations(allRows);
+
+    calculations();
+    updateLatestEntryBtn();
     table.scrollIntoView({ behavior: 'smooth', block: 'start' });
     //celebration
     const newWeight = Number(weight);
@@ -195,10 +240,11 @@ async function sendData() {
     document.querySelector('#weight').value = '';
     document.querySelector('#date').value = '';
     document.querySelector('#comment').value = '';
+    showNormalView();
 }
 
 //table
-async function getTable(allRows) {
+async function getTable() {
     const request = await fetch('/table/get-all', { method: 'get' });
     const result = await request.json();
     if (!result.success) return console.error('Failed to fetch data:', result.error);
@@ -207,8 +253,8 @@ async function getTable(allRows) {
         trToTable(row, table);
     });
     await getGoal();
-    allRows = document.querySelectorAll('#weight-loss-list tr');
-    calculations(allRows);
+    calculations();
+    updateLatestEntryBtn();
     const lastname = sessionStorage.getItem('lastName');
     const firstname = sessionStorage.getItem('firstName');
 
@@ -218,19 +264,18 @@ async function getGoal() {
     const request = await fetch('/goal/get', { method: 'get' });
     const result = await request.json();
 
-    if (!result.success) {
-        return result.error;
-    } else if (result.goal === null) {
-        return alert('Please set a goal to continue using the app.');
+    if (!result.success || result.goal == null) {
+        promptGoalSetup();
+        return;
     }
     goal = result.goal;
-    const lable = document.querySelector('#goal-lable');
-    lable.innerHTML = `Goal is now: '${goal}'`;
+    const lable = document.querySelector('#goal-display');
+    lable.innerHTML = `${goal}`;
 }
 function trToTable(row, table) {
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
-                    <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
+                        <td>${new Date(row.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</td>
                     <td>${row.weight}</td>
                     <td></td>
                     <td>${row.comment}</td>
@@ -241,19 +286,22 @@ function trToTable(row, table) {
 
 //search
 function search() {
-    const refreshTable = document.querySelector('.get-all-btn');
     const summaryArea = document.querySelector('.summary-area');
+    const refreshTable = document.querySelector('.get-all-btn');
+
     async function getBackAll() {
         await getTable();
-        refreshTable.style.display = 'none';
-        summaryArea.style.display = 'block';
+        showNormalView();
     };
 
     document.querySelectorAll('#search-date-btn, #search-weight-btn').forEach(searchBtn => {
         searchBtn.addEventListener('click', async function (event) {
             event.preventDefault();
+
             const inputDate = document.querySelector('#search-date').value;
             const inputWeight = document.querySelector('#search-weight').value;
+            document.querySelector('#search-date').value = '';
+            document.querySelector('#search-weight').value = '';
             if (!inputDate && !inputWeight) return;
 
             const request = await fetch('/table/search', {
@@ -263,29 +311,27 @@ function search() {
             });
             const result = await request.json();
             if (!result.success) return console.error('failed to fetch data');
-            if (result.data.length > 0) {
-                table.innerHTML = '';
-                for (let row of result.data) {
-                    trToTable(row, table);
-                }
-                refreshTable.style.display = 'block';
-                refreshTable.removeEventListener('click', getBackAll);
-                refreshTable.addEventListener('click', getBackAll);
-                const myContainer = document.querySelector('.submit-button');
-                myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                summaryArea.style.display = 'none';
-            } else {
-                alert('No matching data found for the given search criteria.');
-            }
+            if (result.data.length === 0) return alert('No matching data found for the given search criteria.');
 
-            document.querySelector('#search-date').value = '';
-            document.querySelector('#search-weight').value = '';
+            summaryArea.style.display = 'none';
+
+            table.innerHTML = '';
+            for (let row of result.data) {
+                trToTable(row, table);
+            }
+            refreshTable.style.display = 'block';
+            refreshTable.removeEventListener('click', getBackAll);
+            refreshTable.addEventListener('click', getBackAll);
+
+            const myContainer = document.querySelector('.submit-button');
+            myContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 }
 
 //delete
 function deleteData() {
+
     table.addEventListener('click', async function (event) {
         if (!event.target.classList.contains('deleteBtn')) return;
         event.preventDefault();
@@ -303,8 +349,9 @@ function deleteData() {
         const result = await request.json();
         if (result.success) {
             event.target.closest('tr').remove();
-            allRows = document.querySelectorAll('#weight-loss-list tr');
-            calculations(allRows);
+            calculations();
+            updateLatestEntryBtn();
+
         } else {
             console.error('Delete failed', result.error);
         }
@@ -334,8 +381,9 @@ function showConfirmDialog() {
     });
 }
 
-//statistics
-function calculations(allRows) {
+//statistics/*
+function calculations() {
+    allRows = document.querySelectorAll('#weight-loss-list tr');
     calculateSinceLastWeight(allRows);
     const rowCount = weeks(allRows);
     const avrage = avrageLost(allRows);
@@ -358,9 +406,11 @@ function calculateSinceLastWeight(allRows) {
     }
 }
 function weeks(allRows) {
-    const rowCount = allRows.length;
     if (allRows.length === 0) return '-';
-    return (rowCount);
+    const firstDate = new Date(allRows[0].cells[0].textContent);
+    const lastDate = new Date(allRows[allRows.length - 1].cells[0].textContent);
+    const milisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
+    return Math.round((lastDate - firstDate) / milisecondsPerWeek);
 }
 function avrageLost(allRows) {
     if (allRows.length < 2) return '-';
@@ -416,6 +466,7 @@ function trTosummary(rowCount, avrage, totalWeightLost, toLoss, goalPercent) {
     `;
     tbody.appendChild(newRow);
 }
+
 
 // CELEBRATION / FIREWORKS FUNCTIONS (created with AI);
 function showStopBtn() {

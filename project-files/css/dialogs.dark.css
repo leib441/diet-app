@@ -1,4 +1,18 @@
 /* ============================================
+   DARK MODE — ABOUT DIALOG
+   ============================================ */
+body.dark .about-dialog {
+  background: var(--bg-white);
+  border-color: var(--border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.50);
+  color: var(--text-primary);
+}
+
+body.dark .about-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.50);
+}
+
+/* ============================================
    DARK MODE — GOAL DIALOG
    ============================================ */
 
@@ -18,20 +32,9 @@ body.dark #goal-lable {
   color: var(--text-primary);
 }
 
-body.dark #goalInput {
-  background: var(--bg-subtle);
-  border-color: var(--border);
-  color: var(--text-primary);
-}
-
-body.dark #goalInput::placeholder {
-  color: var(--text-muted);
-}
-
-body.dark #goalInput:focus {
-  border-color: var(--border-focus);
-  background: #232640;
-  box-shadow: 0 0 0 4px rgba(107, 127, 248, 0.15);
+body.dark .goal-dialog__help,
+body.dark .goal-dialog__unit {
+  color: var(--text-secondary);
 }
 
 body.dark #confirmGoal {

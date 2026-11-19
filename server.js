@@ -13,6 +13,7 @@ import FormRouter from './routes/table.js';
 import LoginRouter from './routes/auto.js';
 import GoalRouter from './routes/goal.js';
 import session from 'express-session';
+import ChatRouter from './routes/chat.js';
 
 const app = express();
 
@@ -44,6 +45,8 @@ app.use('/auth', LoginRouter );
 app.use('/table', FormRouter);
 
 app.use('/goal', GoalRouter);
+
+app.use('/chat', ChatRouter);
 
 
 const port = process.env.PORT;

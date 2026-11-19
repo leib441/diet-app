@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weight Loss Tracker</title>
+   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📉</text></svg>">
+    <script src="./overlay-controls.js"></script>
     <script src="./table.js"></script>
-
-    <link class="theme-light" rel="stylesheet" href="./css/variables.css">
+   <link class="theme-light" rel="stylesheet" href="./css/variables.css">
     <link class="theme-light" rel="stylesheet" href="./css/navbar.css">
     <link class="theme-light" rel="stylesheet" href="./css/layout.css">
     <link class="theme-light" rel="stylesheet" href="./css/form.css">
@@ -15,9 +16,10 @@
     <link class="theme-light" rel="stylesheet" href="./css/search.css">
     <link class="theme-light" rel="stylesheet" href="./css/dialogs.css">
     <link class="theme-light" rel="stylesheet" href="./css/celebration.css">
+    <link class="theme-light" rel="stylesheet" href="./css/chat.css">
     <link class="theme-light" rel="stylesheet" href="./css/responsive.css">
-    <!-- Dark mode files -->
-    <link rel="stylesheet" href="./css/variables.dark.css">
+    
+  <link rel="stylesheet" href="./css/variables.dark.css">
     <link rel="stylesheet" href="./css/navbar.dark.css">
     <link rel="stylesheet" href="./css/layout.dark.css">
     <link rel="stylesheet" href="./css/form.dark.css">
@@ -25,30 +27,55 @@
     <link rel="stylesheet" href="./css/search.dark.css">
     <link rel="stylesheet" href="./css/dialogs.dark.css">
     <link rel="stylesheet" href="./css/celebration.dark.css">
+    <link rel="stylesheet" href="./css/chat.dark.css">
     <link rel="stylesheet" href="./css/responsive.dark.css">
 </head>
 
 <body>
     <div class="settings">
-        <div class="theme-toggle">
-            <span class="icon-sun"></span>
-            <label class="switch">
-                <input type="checkbox" id="themeToggle" />
-                <span class="slider"></span>
-            </label>
-            <span class="icon-moon"></span>
-        </div>
 
+        <button type="button" id="howItWorksBtn" class="how-it-works-btn">How it works</button>
         <button class="scroll-table-btn">Scroll To Table</button>
-        <button class="summary">Weight-Loss Statistics </button>
+        <button class="summary">Weight-Loss Statistics</button>
         <button class="scroll-search">Search</button>
-        <button class="set-goal-btn">Set A Goal</button>
+        <button class="latest-entry" style="display: none">View Latest Entry</button>
         <button class="get-all-btn" style="display: none">Get All Rows Back</button>
         <button id="stop-song-btn-on-page" onclick="stopSong();" style="display: none">⏹ Stop Song</button>
 
         <div class="user-menu">
-            <p class="username-apper"></p>
-            <button id="logout-btn" type="button" aria-label="Log out">
+            <details class="settings-dropdown">
+                <summary>Settings <span aria-hidden="true">&#9662;</span></summary>
+                <div class="settings-panel">
+                    <div class="theme-toggle">
+                        <span class="setting-label">Theme</span>
+                        <span class="icon-sun" aria-hidden="true"></span>
+                        <label class="switch" aria-label="Toggle dark theme">
+                            <input type="checkbox" id="themeToggle" />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="icon-moon" aria-hidden="true"></span>
+                    </div>
+                    <div class="theme-toggle audio-toggle">
+                        <span class="setting-label">Celebration sound</span>
+
+                        <span class="icon-muted" aria-hidden="true"></span>
+                        <label class="switch" aria-label="Toggle celebration audio">
+                            <input type="checkbox" id="play-audio" checked />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="icon-audio" aria-hidden="true"></span>
+                    </div>
+                    <div class="goal-setting">
+                        <div class="goal-summary">
+                            <span class="setting-label">My weight loss goal is:</span>
+                            <strong id="goal-display">-</strong>
+                            <button type="button" id="edit-goal-btn" class="goal-edit-btn">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </details>
+            <p class="username-apper">Log In</p>
+            <button id="logOutBtn" type="button" aria-label="Log out">
                 <span class="logout-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
                         <path d="M10 17l5-5-5-5M15 12H3M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
@@ -60,30 +87,30 @@
 
     <div class="allPage">
         <div class="containers">
-            <h1>Welcome To The Weight loss Management Table!</h1>
+            <h1 class="welcome-title">Welcome To The Weight loss Management Table!</h1>
             <h2>Here you can manage your weight loss week by week</h2>
 
             <div class="form-area" aria-labelledby="check-in-heading">
-                <h3 class="section-heading" id="check-in-heading">Add A Weekly Entry</h3>
+                <h3 class="section-heading" id="check-in-heading">Enter Your Weight Once A Week</h3>
                 <form id="weight-loss-form" method="post">
                     <div class="form-group">
                         <label for="date">
-                            <h3 class="required">Please select a date:</h3>
+                            <h3 class="required">Date of Entry:</h3>
                         </label>
                         <input class="input-box" type="date" id="date" required>
                     </div>
                     <div class="form-group">
                         <label for="weight">
-                            <h3 class="required">Please enter your weight:</h3>
+                            <h3 class="required">Your current weight:</h3>
                         </label>
                         <input class="input-box" type="number" id="weight" step="0.1" min="99" placeholder="e.g. 140.5"
                             required>
                     </div>
                     <div class="form-group">
                         <label for="comment">
-                            <h3>Add a Comment here: (optional)</h3>
+                            <h3>Comments: (optional)</h3>
                         </label>
-                        <input class="input-box" type="text" id="comment" placeholder="e.g. I feel great!" size="40">
+                        <input class="input-box" type="text" id="comment" placeholder="e.g. holiday week" size="40">
                     </div>
                     <div class="submit-group">
                         <button id="submit" class="submit-button" type="submit">Submit Form</button>
@@ -94,7 +121,7 @@
             <div class="table-container">
 
                 <section aria-labelledby="progress-heading">
-                    <h3 class="section-heading" id="progress-heading">My Entries</h3>
+                    <h3 class="section-heading" id="progress-heading">Your Weight Loss Entries</h3>
                     <table id="weight-loss-table">
                         <thead>
                             <tr>
@@ -144,14 +171,68 @@
         <footer class="copyright">
 
             <p>&copy;2026. All rights reserved. L,F, Developers</p>
-                 <a class="github-link"
-                    href="https://github.com/leib441/diet-app" target="_blank" rel="noopener noreferrer"
-                    onclick="window.open(this.href, '_blank', 'noopener,noreferrer');">
-                    My GitHub Repository</a>
+            <a class="github-link" href="https://github.com/leib441/diet-app" target="_blank" rel="noopener noreferrer"
+                onclick="window.open(this.href, '_blank', 'noopener,noreferrer');">
+                My GitHub Repository</a>
         </footer>
     </div>
 
     <!--dialogs & hidden items -->
+    <dialog id="howItWorksDialog" class="how-it-works-dialog" aria-labelledby="how-it-works-title">
+        <div class="how-it-works-dialog__body">
+        <div class="how-it-works-dialog__header">
+            <div class="how-it-works-dialog__icon" aria-hidden="true">📉</div>
+            <div>
+                <h4 id="how-it-works-title" tabindex="-1" autofocus>How it works</h4>
+                <p class="how-it-works-dialog__lead">A weekly record of your weight, so you can see what changed and how close you are to your goal.</p>
+            </div>
+        </div>
+
+        <div class="how-it-works-dialog__section">
+            <h5>What this app does</h5>
+            <p>Each week you log your weight. The app saves that entry, compares it with the week before, and rolls every entry into a summary. When a new weight is lower than the last one, a short celebration plays.</p>
+        </div>
+
+        <div class="how-it-works-dialog__section">
+            <h5>How to use it</h5>
+            <ol>
+                <li><strong>Set a goal.</strong> Open Settings and choose Edit. Type the weight you want to reach. A goal is required before you can add an entry.</li>
+                <li><strong>Log once a week.</strong> Enter the date, your current weight, and an optional comment, then choose Submit Form.</li>
+                <li><strong>Read the table.</strong> Each row is one entry. “Weight Lost Since Last Week” is last week’s weight minus this week’s. A positive number is weight lost. A negative number is weight gained. The first entry is 0.0.</li>
+                <li><strong>Check the summary.</strong> It shows how many weeks passed from your first entry to your latest, your average weekly change, total weight lost, how much is left, the percent of the goal you have reached, and your goal weight.</li>
+                <li><strong>Find an old entry.</strong> Search by date or by weight. Choose Get All Rows Back to restore the full list.</li>
+                <li><strong>Fix a mistake.</strong> Delete removes one entry after you confirm.</li>
+            </ol>
+        </div>
+
+        <div class="how-it-works-dialog__section">
+            <h5>The top bar</h5>
+            <p>Scroll To Table, Weight-Loss Statistics, Search, and View Latest Entry jump to those parts of the page. Settings also holds the light and dark theme and the celebration sound. Use Ask something in the bottom right to open the diet assistant. The icon next to your name logs you out.</p>
+        </div>
+
+        <p class="how-it-works-dialog__closing">Good luck! Enjoy your journey, stay consistent, and lose the weight one week at a time.</p>
+
+        <div class="how-it-works-dialog__actions">
+            <button type="button" id="closeHowItWorks" class="dialog-btn logout-btn">Got it</button>
+        </div>
+        </div>
+    </dialog>
+
+    <!--set goal-->
+    <dialog id="goalDialog" class="goal-dialog" aria-labelledby="goal-lable">
+        <label id="goal-lable" for="goalDialogInput">What weight do you want to reach?</label>
+        <p id="goal-dialog-help" class="goal-dialog__help">Type that weight in pounds. For example, 150. Then choose Save.</p>
+        <div class="goal-dialog__input">
+            <input class="input-box" type="number" id="goalDialogInput" min="1" step="0.1"
+                placeholder="150" inputmode="decimal" aria-describedby="goal-dialog-help" required />
+            <span class="goal-dialog__unit" aria-hidden="true">lb</span>
+        </div>
+        <div class="dialog-btns">
+            <button type="button" id="cancelGoal">Cancel</button>
+            <button type="button" id="confirmGoal">Save</button>
+        </div>
+    </dialog>
+
     <!--celebration-->
     <div id="celebration-overlay">
         <canvas id="fireworks-canvas"></canvas>
@@ -163,16 +244,6 @@
             <button class="close-celebration-btn" onclick="closeCelebration()">Go Back To Table</button>
         </div>
     </div>
-
-    <!--set goal-->
-    <dialog id="goalDialog">
-        <h3 id="goal-lable">Set Goal Weight</h3>
-        <input type="number" id="goalInput" placeholder="Enter goal weight (lbs)" />
-        <div class="dialog-btns">
-            <button id="cancelGoal">Cancel</button>
-            <button id="confirmGoal">Confirm</button>
-        </div>
-    </dialog>
 
     <!--delete data-->
     <dialog id="deleteDialog">
@@ -207,6 +278,36 @@
     <audio id="celebration-audio" preload="auto">
         <source src="./audio/song.mp3" type="audio/mpeg">
     </audio>
+
+    <button type="button" id="chat-button" class="chat-fab" aria-haspopup="dialog" aria-controls="chatDialog">
+        <span class="chat-fab__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+            </svg>
+        </span>
+        <span class="chat-fab__label">Ask something</span>
+    </button>
+
+    <dialog id="chatDialog" class="chat-dialog" aria-labelledby="chat-dialog-title">
+        <div class="chat-dialog__header">
+            <div>
+                <h4 id="chat-dialog-title">Weight Loss Assistant</h4>
+            </div>
+            <button type="button" id="closeChat" class="chat-dialog__close" aria-label="Close chat">&times;</button>
+        </div>
+        <div id="chatMessages" class="chat-dialog__messages" role="log" aria-live="polite"></div>
+        <form id="chat-form" class="chat-dialog__form">
+            <label class="visually-hidden" for="new-message">Write a new message</label>
+            <input id="new-message" name="new-message" autocomplete="off" placeholder="Type a message...">
+            <button type="submit" id="send" aria-label="Send">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+            </button>
+        </form>
+    </dialog>
+
+    <script src="./chat.js"></script>
 </body>
 
 </html>
