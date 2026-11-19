@@ -3,13 +3,16 @@ import { getGoal } from './goal.js';
 
 let chatCleanup;
 
+// Chat history lives in the browser; this only cleans up the legacy table if it still exists.
 const removeStoredChat = () => {
     if (!chatCleanup) {
-        chatCleanup = db.raw(`
-            DROP TABLE IF EXISTS chat_conversation;
-            ALTER TABLE chat DROP COLUMN IF EXISTS conversation_id;
-            DELETE FROM chat;
-        `).catch((error) => {
+        chatCleanup = (async () => {
+            await db.raw('DROP TABLE IF EXISTS chat_conversation');
+            if (await db.schema.hasTable('chat')) {
+                await db.raw('ALTER TABLE chat DROP COLUMN IF EXISTS conversation_id');
+                await db('chat').del();
+            }
+        })().catch((error) => {
             chatCleanup = null;
             throw error;
         });
@@ -19,7 +22,9 @@ const removeStoredChat = () => {
 
 export const clearStoredChat = async (userId) => {
     await removeStoredChat();
-    await db('chat').where({ user_id: userId }).del();
+    if (await db.schema.hasTable('chat')) {
+        await db('chat').where({ user_id: userId }).del();
+    }
 };
 
 export const chatHistoryFrom = (history, newMessage) => {
